@@ -1,0 +1,11 @@
+# Connect this repo in Render (New Web Service → this GitHub repo).
+# After that, every push to main rebuilds and updates the live site.
+services:
+  - type: web
+    name: anuragbandhu
+    runtime: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 8080

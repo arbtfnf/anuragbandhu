@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title th:text="${person.name() + ' — ' + person.headline()}">Anurag Rakesh Bandhu</title>
+  <meta name="description" th:content="${person.summary()}"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/site.css}"/>
+  <script type="application/ld+json" th:utext="${jsonLd}"></script>
+</head>
+<body>
+  <div th:replace="~{fragments :: topbar('home')}"></div>
+
+  <main id="top" class="wrap">
+    <section class="hero">
+      <p class="eyebrow" th:text="${person.location()}">Bengaluru</p>
+      <h1 class="serif" th:text="${person.name()}">Anurag Rakesh Bandhu</h1>
+      <p class="lede" th:text="${person.headline()}">Backend engineer. Civic builder.</p>
+      <p class="summary" th:text="${person.summary()}"></p>
+      <ul class="contact">
+        <li>
+          <a class="link" th:href="'mailto:' + ${person.email()}" th:text="${person.email()}">email</a>
+        </li>
+        <li>
+          <a class="link" th:href="${person.phoneHref()}" th:text="${person.phoneDisplay()}">phone</a>
+        </li>
+        <li>
+          <a class="link ext" th:href="${person.github()}" target="_blank" rel="noopener noreferrer">
+            <span th:text="${person.githubLabel()}">github</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+          </a>
+        </li>
+        <li>
+          <a class="link ext" th:href="${person.linkedin()}" target="_blank" rel="noopener noreferrer">
+            LinkedIn
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+          </a>
+        </li>
+      </ul>
+      <div class="actions no-print">
+        <a class="btn btn-primary" href="/resume.tex" download>Download LaTeX resume</a>
+        <a class="btn btn-ghost" href="/resume">Preview one-pager</a>
+      </div>
+      <p class="hint no-print">
+        One page, same dates as this site. Open the .tex in Overleaf (pdfLaTeX), or preview and print to PDF.
+      </p>
+    </section>
+
+    <section id="work" class="section">
+      <p class="eyebrow">01 — Selected work</p>
+      <h2 class="serif">Things I have shipped</h2>
+      <ul class="stack">
+        <li th:each="project : ${site.projects()}">
+          <div class="row">
+            <h3 class="serif">
+              <a class="link ext" th:if="${project.hasHref()}" th:href="${project.href()}" target="_blank" rel="noopener noreferrer">
+                <span th:text="${project.name()}">Project</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+              </a>
+              <span th:unless="${project.hasHref()}" th:text="${project.name()}">Project</span>
+            </h3>
+            <p class="dates" th:text="${project.period()}"></p>
+          </div>
+          <p class="meta">
+            <span th:text="${project.role()}"></span>
+            <th:block th:if="${project.hasGithub()}">
+              ·
+              <a class="link ext" th:href="${project.github()}" target="_blank" rel="noopener noreferrer">
+                GitHub
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+              </a>
+            </th:block>
+          </p>
+          <p class="body" th:text="${project.summary()}"></p>
+          <ul class="points">
+            <li th:each="point : ${project.points()}">
+              <span class="dot"></span>
+              <span th:text="${point}"></span>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section id="experience" class="section">
+      <p class="eyebrow">02 — Experience</p>
+      <h2 class="serif">Where I have worked</h2>
+      <ol class="stack">
+        <li th:each="role : ${site.experience()}">
+          <div class="row">
+            <h3 class="serif">
+              <a class="link ext" th:if="${role.hasHref()}" th:href="${role.href()}" target="_blank" rel="noopener noreferrer">
+                <span th:text="${role.company()}">Company</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+              </a>
+              <span th:unless="${role.hasHref()}" th:text="${role.company()}">Company</span>
+            </h3>
+            <p class="dates" th:text="${role.dates()}"></p>
+          </div>
+          <p class="title-line">
+            <span th:text="${role.title()}"></span>
+            <span class="badge" th:if="${role.badge() != null}" th:text="${role.badge()}"></span>
+          </p>
+          <p class="place" th:text="${role.locationLine()}"></p>
+          <ul class="points" th:if="${role.hasBullets()}">
+            <li th:each="bullet : ${role.bullets()}">
+              <span class="dot"></span>
+              <span th:text="${bullet}"></span>
+            </li>
+          </ul>
+        </li>
+      </ol>
+    </section>
+
+    <section id="skills" class="section">
+      <p class="eyebrow">03 — Skills</p>
+      <h2 class="serif">How I work</h2>
+      <dl class="skills">
+        <div>
+          <dt>Languages</dt>
+          <dd th:text="${person.skills().languagesLine()}"></dd>
+        </div>
+        <div>
+          <dt>Cloud &amp; infra</dt>
+          <dd th:text="${person.skills().cloudLine()}"></dd>
+        </div>
+        <div>
+          <dt>Tools</dt>
+          <dd th:text="${person.skills().toolsLine()}"></dd>
+        </div>
+      </dl>
+      <p class="note" th:text="${site.practices().get(0)}"></p>
+      <p class="note" th:text="${person.spokenLine()}"></p>
+    </section>
+
+    <section id="about" class="section">
+      <p class="eyebrow">04 — About</p>
+      <h2 class="serif">A short letter</h2>
+      <div class="letter">
+        <p th:each="para : ${person.about()}" th:text="${para}"></p>
+      </div>
+    </section>
+
+    <section class="section plain">
+      <p class="eyebrow">05 — Education &amp; notes</p>
+      <h2 class="serif">School, papers, prizes</h2>
+      <div class="school">
+        <p class="serif" th:text="${site.education().school()}"></p>
+        <p class="note" th:text="${site.education().degree()}"></p>
+        <p class="dates" th:text="${site.education().dates()}"></p>
+      </div>
+      <div class="two-col">
+        <div>
+          <h3 class="subhead">Certifications</h3>
+          <ul>
+            <li th:each="item : ${site.certifications()}" th:text="${item}"></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="subhead">Awards</h3>
+          <ul>
+            <li th:each="item : ${site.awards()}" th:text="${item}"></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        <span th:text="${person.name()}">Anurag Rakesh Bandhu</span>
+        <span class="stack-note"> · Bengaluru · Spring Boot</span>
+      </p>
+      <p>
+        <a class="link" href="/resume">Resume</a>
+        ·
+        <a class="link" href="/resume.tex" download>LaTeX</a>
+        ·
+        <a class="link" th:href="'mailto:' + ${person.email()}" th:text="${person.email()}">email</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

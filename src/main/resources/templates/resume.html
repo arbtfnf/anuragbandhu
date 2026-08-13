@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title th:text="${person.name() + ' — Resume'}">Resume</title>
+  <meta name="description" content="One-page resume. Download LaTeX or print to PDF."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/site.css}"/>
+</head>
+<body class="resume-body">
+  <div class="resume-toolbar no-print">
+    <div class="wrap toolbar-row">
+      <a class="link" href="/">← Back to the site</a>
+      <div class="toolbar-actions">
+        <a class="btn btn-primary" href="/resume.tex" download>Download LaTeX (.tex)</a>
+        <button type="button" class="btn btn-ghost" onclick="window.print()">Print / Save PDF</button>
+      </div>
+    </div>
+    <p class="toolbar-hint wrap">
+      The .tex file is Overleaf-ready (pdfLaTeX). Same dates and bullets as this page.
+    </p>
+  </div>
+
+  <article class="paper" aria-label="Resume">
+    <header class="paper-head">
+      <h1 th:text="${person.name()}">Anurag Rakesh Bandhu</h1>
+      <p class="paper-contact">
+        <a th:href="${person.github()}" th:text="${person.githubLabel()}">github</a>
+        <span aria-hidden="true"> | </span>
+        <a th:href="${person.linkedin()}">linkedin.com/in/anuragbandhu</a>
+        <span aria-hidden="true"> | </span>
+        <a th:href="'mailto:' + ${person.email()}" th:text="${person.email()}">email</a>
+        <span aria-hidden="true"> | </span>
+        <a th:href="${person.phoneHref()}" th:text="${person.phoneDisplay()}">phone</a>
+      </p>
+    </header>
+
+    <section>
+      <h2>Skills</h2>
+      <p><strong>Languages:</strong> <span th:text="${resume.skills().languagesLine()}"></span></p>
+      <p><strong>Cloud &amp; Infrastructure:</strong> <span th:text="${resume.skills().cloudLine()}"></span></p>
+      <p><strong>Tools &amp; Frameworks:</strong> <span th:text="${resume.skills().toolsLine()}"></span></p>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+      <div class="paper-job" th:each="role : ${resume.roles()}">
+        <p class="paper-role">
+          <strong th:text="${role.company()}">Company</strong>
+          <span> | </span>
+          <span th:text="${role.title()}">Title</span>
+          <th:block th:if="${role.stack() != null}">
+            <span> | </span>
+            <span th:text="${role.stack()}">Stack</span>
+          </th:block>
+          <span class="paper-dates" th:text="${role.dates()}">dates</span>
+        </p>
+        <ul th:if="${role.hasBullets()}">
+          <li th:each="bullet : ${role.bullets()}" th:text="${bullet}"></li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Projects</h2>
+      <div class="paper-job" th:each="project : ${resume.projects()}">
+        <p class="paper-role">
+          <strong>
+            <a th:if="${project.hasHref()}" th:href="${project.href()}" th:text="${project.name()}">Project</a>
+            <span th:unless="${project.hasHref()}" th:text="${project.name()}">Project</span>
+          </strong>
+          <span> | </span>
+          <span th:text="${project.role()}">role</span>
+          <span class="paper-dates" th:text="${project.period()}">period</span>
+        </p>
+        <p th:text="${project.summary()}"></p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Leadership &amp; Achievements</h2>
+      <p th:each="item : ${resume.leadership()}">
+        <strong th:text="${item.title() + ':'}">Title:</strong>
+        <span th:text="${item.body()}">body</span>
+      </p>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <p class="paper-role">
+        <strong th:text="${resume.education().school()}">School</strong>
+        <span class="paper-dates" th:text="${resume.education().dates()}">dates</span>
+      </p>
+      <p th:text="${resume.education().degree()}">degree</p>
+    </section>
+  </article>
+</body>
+</html>

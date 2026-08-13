@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+  <header th:fragment="topbar(current)" class="site-header">
+    <div class="wrap">
+      <a class="brand serif" href="/" th:text="${person.firstName()}">Anurag</a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/#work">Work</a>
+        <a href="/#experience">Experience</a>
+        <a href="/resume" th:classappend="${current == 'resume'} ? ' is-active'">Resume</a>
+        <a href="/#about">About</a>
+        <a class="btn btn-primary btn-compact no-print" href="/resume.tex" download>
+          Download LaTeX
+        </a>
+      </nav>
+    </div>
+  </header>
+</body>
+</html>
