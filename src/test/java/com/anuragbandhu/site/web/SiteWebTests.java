@@ -43,8 +43,24 @@ class SiteWebTests {
                 .andExpect(content().string(containsString("Credit Saison")))
                 .andExpect(content().string(containsString("co-lending")))
                 .andExpect(content().string(containsString("leetcode.com/anuragbandhu007")))
+                .andExpect(content().string(containsString("/work/trippe")))
+                .andExpect(content().string(containsString("8,934ms")))
+                .andExpect(content().string(containsString("data-nav-toggle")))
+                .andExpect(content().string(containsString("data-theme=\"night\"")))
                 .andExpect(content().string(not(containsString("85532"))))
                 .andExpect(content().string(not(containsString("telephone"))));
+    }
+
+    @Test
+    void trippeCaseStudyRendersIndexingAndRedis() throws Exception {
+        mockMvc.perform(get("/work/trippe"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Trippe World")))
+                .andExpect(content().string(containsString("8,934ms")))
+                .andExpect(content().string(containsString("Fifteen travel personas")))
+                .andExpect(content().string(containsString("JSONB")))
+                .andExpect(content().string(containsString("Thursday")))
+                .andExpect(content().string(not(containsString("85532"))));
     }
 
     @Test

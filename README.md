@@ -20,6 +20,7 @@ Open [http://localhost:8080](http://localhost:8080).
 | `/` | Site |
 | `/resume` | One-page preview |
 | `/resume.tex` | LaTeX download (POST with email; GET redirects to the gate) |
+| `/work/trippe` | Trippe World: indexes and Redis |
 | `/api` | JSON |
 
 ```bash

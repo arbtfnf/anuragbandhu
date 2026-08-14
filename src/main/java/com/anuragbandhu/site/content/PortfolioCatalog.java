@@ -1,5 +1,8 @@
 package com.anuragbandhu.site.content;
 
+import com.anuragbandhu.site.domain.CaseStudy;
+import com.anuragbandhu.site.domain.CaseStudyBlock;
+import com.anuragbandhu.site.domain.CaseStudyStat;
 import com.anuragbandhu.site.domain.Education;
 import com.anuragbandhu.site.domain.Hackathon;
 import com.anuragbandhu.site.domain.Leadership;
@@ -22,15 +25,18 @@ import java.util.Set;
  * Netsmart bullets come from the CareFabric 2025-2026 worklog. ~3 billion
  * messages/month included at the author's request. No customer names. Zeitview
  * migration bullets come from the graph-based ES-to-Postgres interview brief.
- * Trippe bullets come from the TrippeWorld GitHub org (private services) plus
- * the resume engagement figure. Trippe ends Nov 2023
- * so Credit Saison / Saison Omni (Feb-Oct 2024) sits on the ledger. Saison Omni
- * bullets describe the co-lending platform; LinkedIn had no metrics.
+ * Trippe bullets and /work/trippe come from the Redis caching guide and the
+ * indexing strategy (July 2025 write-ups in the Trippe work-log), plus the
+ * TrippeWorld GitHub org (private services) and the resume engagement figure.
+ * Trippe ends Nov 2023 so Credit Saison / Saison Omni (Feb-Oct 2024) sits on
+ * the ledger. Saison Omni bullets describe the co-lending platform; LinkedIn
+ * had no metrics.
  */
 @Component
 public class PortfolioCatalog {
 
     private final SiteModel site = build();
+    private final CaseStudy trippe = trippeStudy();
 
     private static final Set<String> RESUME_ROLE_IDS = Set.of(
             "netsmart", "zeitview", "credit-saison", "trippe"
@@ -48,6 +54,10 @@ public class PortfolioCatalog {
 
     public SiteModel site() {
         return site;
+    }
+
+    public CaseStudy trippe() {
+        return trippe;
     }
 
     public ResumeDocument resume() {
@@ -127,7 +137,7 @@ public class PortfolioCatalog {
                 new Skills(
                         List.of("Java", "Python", "JavaScript/TypeScript", "SQL", "C++", "Bash"),
                         List.of("AWS (S3, SQS, Lambda, ECS, CloudWatch)", "GCP", "Docker", "Kubernetes", "Terraform"),
-                        List.of("Spring Boot", "Spring MVC", "REST APIs", "Git", "PostgreSQL", "MySQL", "Elasticsearch")
+                        List.of("Spring Boot", "Spring MVC", "REST APIs", "Git", "PostgreSQL", "MySQL", "Redis", "Elasticsearch")
                 ),
                 List.of(
                         new SpokenLanguage("English", "Full professional"),
@@ -183,12 +193,13 @@ public class PortfolioCatalog {
                         "Trippe World",
                         "2021 to 2023",
                         "Software Developer & founding member",
+                        "/work/trippe",
                         null,
-                        null,
-                        "Travel-commerce platform: travelers, local guides, and trip stories. Spring Boot microservices (auth, content, recommendation, communicator), React/Redux web, Android, MySQL, AWS.",
+                        "Travel-commerce platform: travelers, local guides, and trip stories. Spring Boot microservices (auth, content, recommendation, communicator), React/Redux web, Android, PostgreSQL, Redis, AWS.",
                         List.of(
                                 "JWT auth (OTP, password, Google), trip planning and locations, S3 media, community/ratings, and a feed ranked from post-view signals.",
-                                "Team of four. Google Analytics and Mixpanel funnels to decide what to ship next."
+                                "PostgreSQL JSONB GIN indexes cut tag search from 8,934ms to 34ms on a million trip records. Redis persona feeds took the same path to 5ms.",
+                                "Thursday 7pm cache warmup before a 5x weekend-planning spike (500 concurrent). Team of four. Mixpanel funnels for what to ship next."
                         )
                 )
         );
@@ -258,13 +269,14 @@ public class PortfolioCatalog {
                         "Bengaluru",
                         "Jul 2021",
                         "Nov 2023",
-                        "Java, Spring Boot, MySQL, React, Android, AWS",
-                        null,
+                        "Java, Spring Boot, PostgreSQL, Redis, React, Android, AWS",
+                        "/work/trippe",
                         List.of(
                                 "Built the backend for a travel-commerce product that matched travelers with local guides and shared trips: trip planning, locations, diaries, community, tags, ratings, and referrals, from first service to production.",
-                                "Split the platform into Spring Boot microservices (Java 8, MySQL, JPA): auth, content, recommendation, and communicator (email, SMS, push), plus a shared Java SDK so services talked over REST (Retrofit) instead of a monolith.",
-                                "Auth issued JWTs (Spring Security + JJWT) with OTP, password, and Google sign-in. Content owned trips, S3 media, and the social graph. The recommendation service ranked a user feed from post-view signals.",
-                                "Led a team of four across a React/Redux web app (Google Maps, S3 uploads, Google Analytics, Mixpanel) and an Android client (OneSignal). Recommendation work lifted engagement ~25%."
+                                "Split the platform into Spring Boot microservices (Java 8, JPA): auth, content, recommendation, and communicator (email, SMS, push), plus a shared Java SDK so services talked over REST (Retrofit) instead of a monolith.",
+                                "Indexed the trip store in PostgreSQL for how people actually search: JSONB GIN on tags (no full-text search), partial indexes that skip soft-deletes, GiST for nearby locations. On a million trip records, tag search 8,934ms to 34ms, location queries 5,247ms to 89ms, a user's trips 2,156ms to 12ms.",
+                                "Put Redis in front of persona feeds (cache-aside, 15 travel personas, TTL by how fast that tag set changes). Same tag path 8,934ms to 5ms, 85-95% hit rate, 80% fewer direct database queries. Scheduled warmup Thursday 7pm before the 5x weekend-planning spike (500 concurrent), with a database fallback if Redis missed.",
+                                "Auth issued JWTs (Spring Security + JJWT) with OTP, password, and Google sign-in. Led a team of four across a React/Redux web app and an Android client. Recommendation work lifted engagement ~25%."
                         )
                 ),
                 new Role(
@@ -426,6 +438,51 @@ public class PortfolioCatalog {
                 ),
                 List.of(
                         "Amazon Q and MCP servers wired to local docs and codebase context. Routine coding time down ~25% on the Netsmart team."
+                )
+        );
+    }
+
+    private static CaseStudy trippeStudy() {
+        return new CaseStudy(
+                "trippe",
+                "Trippe World",
+                "2021 to 2023",
+                "Software Developer & founding member",
+                "Social travel: travelers, local guides, and trip stories. These notes come from the Redis caching guide and the indexing strategy written for the platform. Numbers below are from those documents, not invented for this page.",
+                List.of(
+                        new CaseStudyStat("Tag search", "8,934ms to 5ms with Redis (34ms with indexes alone)"),
+                        new CaseStudyStat("Persona feed cache", "85-95% hit rate"),
+                        new CaseStudyStat("Thursday night", "5x traffic, 500 concurrent"),
+                        new CaseStudyStat("Index bench", "1 million trip records")
+                ),
+                List.of(
+                        new CaseStudyBlock(
+                                "How people actually search",
+                                List.of(
+                                        "Most traffic is reads: browsing trips, searching tags, opening feeds. Writes (new trips, likes, comments) are the rest. Tag search is about 70% of discovery. Thursday night, when people plan the weekend, traffic is about 5x a normal evening.",
+                                        "Without indexes, a million trip records made tag search take 8,934ms. Location queries 5,247ms. A user's own trips 2,156ms. Load tests at 500 concurrent users fell over after about 50."
+                                )
+                        ),
+                        new CaseStudyBlock(
+                                "Indexes first",
+                                List.of(
+                                        "PostgreSQL, indexed for those query patterns. JSONB tags with a GIN containment index. Composite and partial indexes that skip soft-deleted rows. GiST on trip locations for nearby points. Popular-trip and budget filters on the columns the homepage actually uses.",
+                                        "We did not add full-text search on title and description. Tags covered about 90% of discovery, and Elasticsearch stayed a later option. After the indexes: tag search 34ms, location 89ms, a user's trips 12ms, popular trips 28ms."
+                                )
+                        ),
+                        new CaseStudyBlock(
+                                "Then Redis on 15 personas",
+                                List.of(
+                                        "Cache-aside in front of the feed: check Redis, on miss build from the database, store with a TTL. Fifteen travel personas (adventure, food, beach, culture, family, budget, luxury, solo, and the rest), each mapped to a tag set, each with its own TTL depending on how fast that content moves.",
+                                        "A scheduled job warms those feeds every hour during the day, and again at 7pm on Thursday before the spike. If Redis errors, the request falls back to PostgreSQL. Tag search on a warm persona feed: 5ms. Cache hit rate 85-95%. About 80% fewer direct database queries."
+                                )
+                        ),
+                        new CaseStudyBlock(
+                                "The rest of the stack",
+                                List.of(
+                                        "Spring Boot microservices: auth (JWT with OTP, password, Google), content (trips, S3 media, social graph), recommendation (feed from post-view signals), communicator (email, SMS, push). React/Redux web, Android, AWS. Team of four."
+                                )
+                        )
                 )
         );
     }

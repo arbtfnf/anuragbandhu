@@ -18,6 +18,10 @@ public record Role(
         return href != null && !href.isBlank();
     }
 
+    public boolean isExternalHref() {
+        return hasHref() && (href.startsWith("http://") || href.startsWith("https://"));
+    }
+
     public boolean hasBullets() {
         return bullets != null && !bullets.isEmpty();
     }

@@ -6,6 +6,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
     <link href="https://fonts.cdnfonts.com/css/cooper-black" rel="stylesheet"/>
+    <script>
+      document.documentElement.dataset.theme = localStorage.getItem("theme") === "day" ? "day" : "night";
+    </script>
     <link rel="stylesheet" th:href="@{/css/site.css}"/>
     <script th:src="@{/js/theme.js}"></script>
   </th:block>

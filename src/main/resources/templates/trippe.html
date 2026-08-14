@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title th:text="${study.title() + ' / ' + person.name()}">Trippe World</title>
+  <meta name="description" th:content="${study.lede()}"/>
+  <th:block th:replace="~{fonts :: headLinks}"/>
+</head>
+<body>
+  <div th:replace="~{fragments :: topbar('work')}"></div>
+
+  <main class="wrap">
+    <section class="hero">
+      <p class="eyebrow">
+        <a class="link" href="/#work">Selected work</a>
+      </p>
+      <h1 class="serif" th:text="${study.title()}">Trippe World</h1>
+      <p class="lede" th:text="${study.role()}">Software Developer &amp; founding member</p>
+      <p class="dates" th:text="${study.period()}">2021 to 2023</p>
+      <p class="summary" th:text="${study.lede()}"></p>
+    </section>
+
+    <ul class="stat-grid" aria-label="Measured results">
+      <li th:each="stat : ${study.stats()}">
+        <p class="stat-label" th:text="${stat.label()}">Label</p>
+        <p class="stat-value" th:text="${stat.value()}">Value</p>
+      </li>
+    </ul>
+
+    <section class="case-block" th:each="block : ${study.blocks()}">
+      <h2 class="serif" th:text="${block.heading()}">Heading</h2>
+      <p class="body" th:each="para : ${block.paragraphs()}" th:text="${para}"></p>
+    </section>
+
+    <p class="note case-source">
+      Source: Redis Caching Implementation Guide (Trippe World, July 2025) and Trippe World Complete Indexing Strategy. The one-pager still treats this role as a compact line;
+      <a class="link" href="/#experience">the homepage has the bullets</a>.
+    </p>
+  </main>
+
+  <footer class="chrome-bottom">
+    <span>Bengaluru</span>
+    <span class="coords">12.9716 N / 77.5946 E</span>
+    <a href="/#experience">Experience</a>
+  </footer>
+  <div th:replace="~{fragments :: resumeGate}"></div>
+</body>
+</html>

@@ -1,9 +1,35 @@
 (() => {
   const root = document.documentElement;
   const stored = localStorage.getItem("theme");
-  root.dataset.theme = stored === "night" ? "night" : "day";
+  root.dataset.theme = stored === "day" ? "day" : "night";
+
+  const closeNav = () => {
+    document.querySelectorAll(".chrome-top.is-nav-open").forEach((header) => {
+      header.classList.remove("is-nav-open");
+      const toggle = header.querySelector("[data-nav-toggle]");
+      if (toggle) {
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-label", "Open menu");
+      }
+    });
+  };
 
   document.addEventListener("click", (event) => {
+    const navToggle = event.target.closest("[data-nav-toggle]");
+    if (navToggle) {
+      const header = navToggle.closest(".chrome-top");
+      if (!header) return;
+      const open = !header.classList.contains("is-nav-open");
+      header.classList.toggle("is-nav-open", open);
+      navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+      navToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      return;
+    }
+
+    if (event.target.closest(".nav a")) {
+      closeNav();
+    }
+
     const button = event.target.closest("[data-theme-toggle]");
     if (button) {
       const next = root.dataset.theme === "night" ? "day" : "night";
@@ -36,7 +62,9 @@
     if (email) email.focus();
   });
 
-  if (new URLSearchParams(window.location.search).get("download") === "1") {
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeNav();
+  });
     const gate = document.getElementById("resume-gate");
     if (gate && typeof gate.showModal === "function") {
       const source = document.getElementById("resume-gate-source");

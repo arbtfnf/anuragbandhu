@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" data-theme="night" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -56,9 +56,13 @@
         <li th:each="project : ${site.projects()}">
           <div class="row">
             <h3 class="serif">
-              <a class="link ext" th:if="${project.hasHref()}" th:href="${project.href()}" target="_blank" rel="noopener noreferrer">
+              <a th:if="${project.hasHref()}"
+                 th:href="${project.href()}"
+                 th:class="${project.isExternalHref()} ? 'link ext' : 'link'"
+                 th:target="${project.isExternalHref()} ? '_blank'"
+                 th:rel="${project.isExternalHref()} ? 'noopener noreferrer'">
                 <span th:text="${project.name()}">Project</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+                <svg th:if="${project.isExternalHref()}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
               </a>
               <span th:unless="${project.hasHref()}" th:text="${project.name()}">Project</span>
             </h3>
@@ -124,9 +128,13 @@
         <li th:each="role : ${site.experience()}">
           <div class="row">
             <h3 class="serif">
-              <a class="link ext" th:if="${role.hasHref()}" th:href="${role.href()}" target="_blank" rel="noopener noreferrer">
+              <a th:if="${role.hasHref()}"
+                 th:href="${role.href()}"
+                 th:class="${role.isExternalHref()} ? 'link ext' : 'link'"
+                 th:target="${role.isExternalHref()} ? '_blank'"
+                 th:rel="${role.isExternalHref()} ? 'noopener noreferrer'">
                 <span th:text="${role.company()}">Company</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+                <svg th:if="${role.isExternalHref()}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
               </a>
               <span th:unless="${role.hasHref()}" th:text="${role.company()}">Company</span>
             </h3>

@@ -16,6 +16,10 @@ public record Project(
         return href != null && !href.isBlank();
     }
 
+    public boolean isExternalHref() {
+        return hasHref() && (href.startsWith("http://") || href.startsWith("https://"));
+    }
+
     public boolean hasGithub() {
         return github != null && !github.isBlank();
     }
