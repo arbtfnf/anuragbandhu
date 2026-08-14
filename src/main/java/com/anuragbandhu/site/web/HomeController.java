@@ -41,7 +41,12 @@ public class HomeController {
         payload.put("email", person.email());
         payload.put("telephone", person.phoneHref().replace("tel:", ""));
         payload.put("url", person.siteUrl());
-        payload.put("sameAs", List.of(person.github(), person.linkedin()));
+        payload.put("sameAs", List.of(
+                person.github(),
+                person.linkedin(),
+                person.leetcode(),
+                "https://medium.com/@anrgbndhu"
+        ));
         payload.put("alumniOf", "The National Institute of Engineering, Mysuru");
         payload.put("address", Map.of(
                 "@type", "PostalAddress",

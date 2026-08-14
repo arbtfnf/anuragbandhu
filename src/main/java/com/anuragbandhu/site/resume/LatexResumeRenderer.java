@@ -73,6 +73,16 @@ public class LatexResumeRenderer {
             tex.append("\n");
         }
 
+        if (resume.hasEarlier()) {
+            tex.append("\\section{Earlier}\n");
+            for (Role role : resume.earlier()) {
+                tex.append("\\textbf{").append(LatexEscaper.text(role.company())).append("}");
+                tex.append(" $|$ ").append(LatexEscaper.text(role.title()));
+                tex.append(" \\hfill ").append(LatexEscaper.text(role.dates())).append("\\\\\n");
+            }
+            tex.append("\n");
+        }
+
         tex.append("\\section{Projects}\n");
         for (Project project : resume.projects()) {
             tex.append("\\textbf{");

@@ -3,12 +3,9 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title th:text="${person.name() + ' — ' + person.headline()}">Anurag Rakesh Bandhu</title>
+  <title th:text="${person.name() + ' / ' + person.headline()}">Anurag Rakesh Bandhu</title>
   <meta name="description" th:content="${person.summary()}"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" th:href="@{/css/site.css}"/>
+  <th:block th:replace="~{fonts :: headLinks}"/>
   <script type="application/ld+json" th:utext="${jsonLd}"></script>
 </head>
 <body>
@@ -17,7 +14,7 @@
   <main id="top" class="wrap">
     <section class="hero">
       <p class="eyebrow" th:text="${person.location()}">Bengaluru</p>
-      <h1 class="serif" th:text="${person.name()}">Anurag Rakesh Bandhu</h1>
+      <h1 th:text="${person.name()}">Anurag Rakesh Bandhu</h1>
       <p class="lede" th:text="${person.headline()}">Backend engineer. Civic builder.</p>
       <p class="summary" th:text="${person.summary()}"></p>
       <ul class="contact">
@@ -39,6 +36,12 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
           </a>
         </li>
+        <li th:if="${person.hasLeetcode()}">
+          <a class="link ext" th:href="${person.leetcode()}" target="_blank" rel="noopener noreferrer">
+            <span th:text="${person.leetcodeLabel()}">leetcode</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+          </a>
+        </li>
       </ul>
       <div class="actions no-print">
         <a class="btn btn-primary" href="/resume.tex" download>Download LaTeX resume</a>
@@ -50,7 +53,7 @@
     </section>
 
     <section id="work" class="section">
-      <p class="eyebrow">01 — Selected work</p>
+      <p class="eyebrow">01 / Selected work</p>
       <h2 class="serif">Things I have shipped</h2>
       <ul class="stack">
         <li th:each="project : ${site.projects()}">
@@ -85,8 +88,40 @@
       </ul>
     </section>
 
+    <section id="writing" class="section">
+      <p class="eyebrow">02 / Writing</p>
+      <h2 class="serif">Tagged from Medium</h2>
+      <p class="body">
+        Essays I published on Medium. Tags are the ones on the article.
+        <a class="link ext" th:href="${site.mediumProfile()}" target="_blank" rel="noopener noreferrer">
+          medium.com/@anrgbndhu
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+        </a>
+      </p>
+      <ul class="stack">
+        <li th:each="piece : ${site.writing()}">
+          <div class="row">
+            <h3 class="serif">
+              <a class="link ext" th:href="${piece.href()}" target="_blank" rel="noopener noreferrer">
+                <span th:text="${piece.title()}">Title</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+              </a>
+            </h3>
+            <p class="dates" th:text="${piece.published()}"></p>
+          </div>
+          <p class="meta">
+            <span th:text="${piece.venue()}">Medium</span>
+          </p>
+          <p class="body" th:text="${piece.summary()}"></p>
+          <ul class="tags" aria-label="Tags">
+            <li th:each="tag : ${piece.tags()}" th:text="${tag}"></li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
     <section id="experience" class="section">
-      <p class="eyebrow">02 — Experience</p>
+      <p class="eyebrow">03 / Experience</p>
       <h2 class="serif">Where I have worked</h2>
       <ol class="stack">
         <li th:each="role : ${site.experience()}">
@@ -115,8 +150,32 @@
       </ol>
     </section>
 
+    <section id="hackathons" class="section">
+      <p class="eyebrow">04 / Hackathons</p>
+      <h2 class="serif">Things I have won</h2>
+      <ul class="stack">
+        <li th:each="meet : ${site.hackathons()}">
+          <div class="row">
+            <h3 class="serif" th:text="${meet.name()}">Hackathon</h3>
+            <p class="dates" th:text="${meet.dates()}"></p>
+          </div>
+          <p class="title-line">
+            <span th:text="${meet.venue()}"></span>
+            <span class="badge" th:text="${meet.result()}">Winner</span>
+          </p>
+          <p class="body" th:text="${meet.summary()}"></p>
+          <ul class="points">
+            <li th:each="point : ${meet.points()}">
+              <span class="dot"></span>
+              <span th:text="${point}"></span>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
     <section id="skills" class="section">
-      <p class="eyebrow">03 — Skills</p>
+      <p class="eyebrow">05 / Skills</p>
       <h2 class="serif">How I work</h2>
       <dl class="skills">
         <div>
@@ -137,7 +196,7 @@
     </section>
 
     <section id="about" class="section">
-      <p class="eyebrow">04 — About</p>
+      <p class="eyebrow">06 / About</p>
       <h2 class="serif">A short letter</h2>
       <div class="letter">
         <p th:each="para : ${person.about()}" th:text="${para}"></p>
@@ -145,8 +204,8 @@
     </section>
 
     <section class="section plain">
-      <p class="eyebrow">05 — Education &amp; notes</p>
-      <h2 class="serif">School, papers, prizes</h2>
+      <p class="eyebrow">07 / Education</p>
+      <h2 class="serif">School and papers</h2>
       <div class="school">
         <p class="serif" th:text="${site.education().school()}"></p>
         <p class="note" th:text="${site.education().degree()}"></p>
@@ -159,30 +218,14 @@
             <li th:each="item : ${site.certifications()}" th:text="${item}"></li>
           </ul>
         </div>
-        <div>
-          <h3 class="subhead">Awards</h3>
-          <ul>
-            <li th:each="item : ${site.awards()}" th:text="${item}"></li>
-          </ul>
-        </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap">
-      <p>
-        <span th:text="${person.name()}">Anurag Rakesh Bandhu</span>
-        <span class="stack-note"> · Bengaluru · Spring Boot</span>
-      </p>
-      <p>
-        <a class="link" href="/resume">Resume</a>
-        ·
-        <a class="link" href="/resume.tex" download>LaTeX</a>
-        ·
-        <a class="link" th:href="'mailto:' + ${person.email()}" th:text="${person.email()}">email</a>
-      </p>
-    </div>
+  <footer class="chrome-bottom">
+    <span>Bengaluru</span>
+    <span class="coords">12.9716 N / 77.5946 E</span>
+    <a href="https://medium.com/@anrgbndhu" target="_blank" rel="noopener noreferrer">Medium</a>
   </footer>
 </body>
 </html>

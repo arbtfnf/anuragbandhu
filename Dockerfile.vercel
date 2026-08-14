@@ -1,0 +1,21 @@
+FROM eclipse-temurin:21-jdk-alpine AS build
+WORKDIR /app
+COPY mvnw pom.xml ./
+COPY .mvn .mvn
+COPY src src
+RUN chmod +x mvnw && ./mvnw -B -DskipTests package
+
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+RUN apk add --no-cache nginx
+COPY --from=build /app/target/site-0.1.0.jar app.jar
+COPY nginx.vercel.conf /etc/nginx/nginx.vercel.conf
+COPY start-vercel.sh /start.sh
+RUN chmod +x /start.sh \
+  && mkdir -p /var/lib/nginx/tmp /var/log/nginx /run/nginx \
+  && ln -sf /dev/stderr /var/log/nginx/error.log
+ENV PORT=80
+ENV JAVA_HOME=/opt/java/openjdk
+ENV PATH="/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+EXPOSE 80
+CMD ["/start.sh"]

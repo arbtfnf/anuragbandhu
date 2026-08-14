@@ -33,10 +33,21 @@ docker build -t anuragbandhu .
 docker run --rm -p 8080:8080 anuragbandhu
 ```
 
-## GitHub → live site
+## Deploy (Vercel)
 
-1. Push to `main` (CI runs tests; an image is published to GitHub Container Registry).
-2. **One-time:** in [Render](https://render.com) create a **Web Service**, connect `arbtfnf/anuragbandhu`, runtime Docker. Render reads `render.yaml` and redeploys on every push to `main`.
-3. Point a domain (e.g. `anuragbandhu.com`) at the Render URL.
+The site is Spring Boot. Vercel runs it from `Dockerfile.vercel` (nginx on `$PORT`, JVM behind it).
 
-Until Render is connected, push updates GitHub and CI only — not a public website.
+Live: [https://anuragbandhu.vercel.app](https://anuragbandhu.vercel.app)
+
+```bash
+npx vercel login
+npx vercel --prod --yes
+```
+
+Or connect [github.com/arbtfnf/anuragbandhu](https://github.com/arbtfnf/anuragbandhu) in the Vercel dashboard. Every push to `main` then rebuilds.
+
+First request after idle can take a few seconds (JVM cold start). After that it stays warm for a few minutes.
+
+## GitHub CI
+
+Push to `main` runs tests and publishes an image to GitHub Container Registry. That image is for Docker/Render, not required for Vercel.

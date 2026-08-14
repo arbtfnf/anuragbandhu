@@ -13,6 +13,8 @@ public record Person(
         String github,
         String githubHandle,
         String linkedin,
+        String leetcode,
+        String leetcodeHandle,
         String siteUrl,
         String summary,
         List<String> about,
@@ -21,6 +23,14 @@ public record Person(
 ) {
     public String githubLabel() {
         return "github.com/" + githubHandle;
+    }
+
+    public String leetcodeLabel() {
+        return "leetcode.com/" + leetcodeHandle;
+    }
+
+    public boolean hasLeetcode() {
+        return leetcode != null && !leetcode.isBlank();
     }
 
     public String spokenLine() {

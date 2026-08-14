@@ -3,24 +3,22 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title th:text="${person.name() + ' — Resume'}">Resume</title>
+  <title th:text="${person.name() + ' / Resume'}">Resume</title>
   <meta name="description" content="One-page resume. Download LaTeX or print to PDF."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" th:href="@{/css/site.css}"/>
+  <th:block th:replace="~{fonts :: headLinks}"/>
 </head>
 <body class="resume-body">
   <div class="resume-toolbar no-print">
-    <div class="wrap toolbar-row">
-      <a class="link" href="/">← Back to the site</a>
+    <div class="toolbar-row">
+      <a class="chrome-back" href="/">Site</a>
       <div class="toolbar-actions">
-        <a class="btn btn-primary" href="/resume.tex" download>Download LaTeX (.tex)</a>
-        <button type="button" class="btn btn-ghost" onclick="window.print()">Print / Save PDF</button>
+        <a class="btn btn-ghost" href="/resume.tex" download>Download LaTeX</a>
+        <button type="button" class="btn btn-primary" onclick="window.print()">Print / PDF</button>
+        <button type="button" class="icon-btn" data-theme-toggle aria-label="Toggle day and night">◐</button>
       </div>
     </div>
-    <p class="toolbar-hint wrap">
-      The .tex file is Overleaf-ready (pdfLaTeX). Same dates and bullets as this page.
+    <p class="toolbar-hint">
+      Overleaf-ready .tex (pdfLaTeX). Same dates as this page.
     </p>
   </div>
 
@@ -61,6 +59,18 @@
         <ul th:if="${role.hasBullets()}">
           <li th:each="bullet : ${role.bullets()}" th:text="${bullet}"></li>
         </ul>
+      </div>
+    </section>
+
+    <section th:if="${resume.hasEarlier()}">
+      <h2>Earlier</h2>
+      <div class="paper-job" th:each="role : ${resume.earlier()}">
+        <p class="paper-role">
+          <strong th:text="${role.company()}">Company</strong>
+          <span> | </span>
+          <span th:text="${role.title()}">Title</span>
+          <span class="paper-dates" th:text="${role.dates()}">dates</span>
+        </p>
       </div>
     </section>
 

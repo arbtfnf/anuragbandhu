@@ -27,7 +27,7 @@ public record Role(
     }
 
     public String dates() {
-        return start + " – " + end;
+        return start + " to " + end;
     }
 
     public String locationLine() {
