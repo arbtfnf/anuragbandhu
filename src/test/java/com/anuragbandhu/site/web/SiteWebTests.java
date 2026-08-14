@@ -76,7 +76,11 @@ class SiteWebTests {
                 .andExpect(content().string(containsString("Saison Omni")))
                 .andExpect(content().string(containsString("co-lending")))
                 .andExpect(content().string(containsString("Techkriti")))
-                .andExpect(content().string(containsString("ClaudeGravity")))
+                .andExpect(content().string(not(containsString("ClaudeGravity"))))
+                .andExpect(content().string(not(containsString("Amazon Q"))))
+                .andExpect(content().string(containsString("OpenSearch")))
+                .andExpect(content().string(containsString("FHIR")))
+                .andExpect(content().string(containsString("8,934ms")))
                 .andExpect(content().string(containsString("85532")))
                 .andExpect(content().string(containsString("class=\"metric\"")))
                 .andExpect(content().string(containsString("~3 billion")));

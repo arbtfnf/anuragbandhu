@@ -42,11 +42,7 @@ public class PortfolioCatalog {
             "netsmart", "zeitview", "credit-saison", "trippe"
     );
 
-    private static final Set<String> RESUME_COMPACT_IDS = Set.of("trippe");
-
-    private static final Set<String> RESUME_PROJECT_IDS = Set.of(
-            "notebook", "claudegravity"
-    );
+    private static final Set<String> RESUME_PROJECT_IDS = Set.of("notebook");
 
     private static final Set<String> RESUME_EARLIER_IDS = Set.of(
             "commscope", "ceph", "redhat"
@@ -63,27 +59,24 @@ public class PortfolioCatalog {
     public ResumeDocument resume() {
         List<Role> roles = site.experience().stream()
                 .filter(role -> RESUME_ROLE_IDS.contains(role.id()))
-                .map(role -> RESUME_COMPACT_IDS.contains(role.id()) ? compactResumeRole(role) : role)
+                .map(PortfolioCatalog::forResume)
                 .toList();
         List<Role> earlier = site.experience().stream()
                 .filter(role -> RESUME_EARLIER_IDS.contains(role.id()))
                 .toList();
         return new ResumeDocument(
                 site.person(),
-                site.person().skills(),
+                resumeSkills(),
                 roles,
                 earlier,
                 site.projects().stream()
                         .filter(project -> RESUME_PROJECT_IDS.contains(project.id()))
+                        .map(PortfolioCatalog::forResume)
                         .toList(),
                 List.of(
                         new Leadership(
                                 "Technical mentorship",
                                 "Bi-weekly sessions on distributed systems and code quality; onboarded 3 junior engineers at Netsmart."
-                        ),
-                        new Leadership(
-                                "AI workflow",
-                                site.practices().getFirst()
                         ),
                         new Leadership(
                                 "techNIEks Hackathon 2018",
@@ -98,7 +91,40 @@ public class PortfolioCatalog {
         );
     }
 
-    private static Role compactResumeRole(Role role) {
+    private static Skills resumeSkills() {
+        return new Skills(
+                List.of("Java", "Python", "JavaScript/TypeScript", "SQL"),
+                List.of("AWS (S3, SQS, Lambda, ECS, CloudWatch)", "Docker", "Kubernetes"),
+                List.of("Spring Boot", "REST APIs", "PostgreSQL", "Redis", "OpenSearch", "FHIR", "Elasticsearch")
+        );
+    }
+
+    private static Role forResume(Role role) {
+        return switch (role.id()) {
+            case "netsmart" -> withBullets(role, List.of(
+                    "Platform team on CareFabric, Netsmart's healthcare interoperability layer: ~3 billion clinical messages per month (~1,150/sec, 24/7).",
+                    "OpenSearch prod incident (Dec 2025): cluster yellow, ~70 unassigned replicas, heap 92-98%, fielddata CircuitBreakerExceptions. No-sort queries defaulted to _id. Changed paging default to _doc. After deploy: heap under 80%, 0 unassigned, green. Explicit orderBy untouched.",
+                    "Production on-call, 14 rotations in 12 months. Closed 9 production Inbox defects, including one that passed QA and failed in prod.",
+                    "Migrated the Inbox Admin Tool onto the platform SDK (Java 21, Spring Boot 3.x). Delivered 14 FHIR resources as first-class search/store types.",
+                    "Implemented FHIR _lastUpdated across a multi-repository data store. Closed an unmerged 74-repository PR, then split schema and query into two reviewable changes."
+            ));
+            case "zeitview" -> withBullets(role, List.of(
+                    "Modeled Elasticsearch to PostgreSQL as a DAG in Java (JGraphT): topological load order so children never landed before parents; DFS/SCC for cycles.",
+                    "Flattened nested Elasticsearch arrays into junction tables; validated with counts, checksums, and rollback on failure.",
+                    "Ran independent DAG levels in parallel (~60% of tables), cutting estimated migration from 3 days to 18 hours. Ephemeral DBs for tests; ~90% coverage."
+            ));
+            case "credit-saison" -> withBullets(role, List.of(
+                    "Backend on Saison Omni, Credit Saison's co-lending platform: banks and NBFCs from origination through loan management.",
+                    "Partner-facing APIs and LMS sync; stayed with partner go-lives in a regulated NBFC environment."
+            ));
+            case "trippe" -> withBullets(role, List.of(
+                    "PostgreSQL JSONB GIN indexes then Redis persona feeds: tag search 8,934ms to 5ms (34ms with indexes alone)."
+            ));
+            default -> role;
+        };
+    }
+
+    private static Role withBullets(Role role, List<String> bullets) {
         return new Role(
                 role.id(),
                 role.company(),
@@ -107,8 +133,24 @@ public class PortfolioCatalog {
                 role.location(),
                 role.start(),
                 role.end(),
-                null,
+                role.stack(),
                 role.href(),
+                bullets
+        );
+    }
+
+    private static Project forResume(Project project) {
+        if (!"notebook".equals(project.id())) {
+            return project;
+        }
+        return new Project(
+                project.id(),
+                project.name(),
+                project.period(),
+                project.role(),
+                project.href(),
+                project.github(),
+                "Civic livability ledger for Bengaluru: ward scores, neighbour reports, Next.js/TypeScript.",
                 List.of()
         );
     }
@@ -137,7 +179,7 @@ public class PortfolioCatalog {
                 new Skills(
                         List.of("Java", "Python", "JavaScript/TypeScript", "SQL", "C++", "Bash"),
                         List.of("AWS (S3, SQS, Lambda, ECS, CloudWatch)", "GCP", "Docker", "Kubernetes", "Terraform"),
-                        List.of("Spring Boot", "Spring MVC", "REST APIs", "Git", "PostgreSQL", "MySQL", "Redis", "Elasticsearch")
+                        List.of("Spring Boot", "Spring MVC", "REST APIs", "Git", "PostgreSQL", "MySQL", "Redis", "OpenSearch", "Elasticsearch", "FHIR")
                 ),
                 List.of(
                         new SpokenLanguage("English", "Full professional"),
