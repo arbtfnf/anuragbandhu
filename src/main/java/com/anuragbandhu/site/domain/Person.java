@@ -2,14 +2,16 @@ package com.anuragbandhu.site.domain;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public record Person(
         String name,
         String firstName,
         String headline,
         String location,
         String email,
-        String phoneDisplay,
-        String phoneHref,
+        @JsonIgnore String phoneDisplay,
+        @JsonIgnore String phoneHref,
         String github,
         String githubHandle,
         String linkedin,

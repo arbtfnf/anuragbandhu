@@ -39,7 +39,6 @@ public class HomeController {
         payload.put("name", person.name());
         payload.put("jobTitle", "Senior Software Engineer");
         payload.put("email", person.email());
-        payload.put("telephone", person.phoneHref().replace("tel:", ""));
         payload.put("url", person.siteUrl());
         payload.put("sameAs", List.of(
                 person.github(),

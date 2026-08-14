@@ -22,9 +22,6 @@
           <a class="link" th:href="'mailto:' + ${person.email()}" th:text="${person.email()}">email</a>
         </li>
         <li>
-          <a class="link" th:href="${person.phoneHref()}" th:text="${person.phoneDisplay()}">phone</a>
-        </li>
-        <li>
           <a class="link ext" th:href="${person.github()}" target="_blank" rel="noopener noreferrer">
             <span th:text="${person.githubLabel()}">github</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
@@ -44,11 +41,11 @@
         </li>
       </ul>
       <div class="actions no-print">
-        <a class="btn btn-primary" href="/resume.tex" download>Download LaTeX resume</a>
+        <a class="btn btn-primary" href="/resume.tex" data-resume-download>Download LaTeX resume</a>
         <a class="btn btn-ghost" href="/resume">Preview one-pager</a>
       </div>
       <p class="hint no-print">
-        One page, same dates as this site. Open the .tex in Overleaf (pdfLaTeX), or preview and print to PDF.
+        One page, same dates as this site. Phone is on the resume, not this page. Open the .tex in Overleaf (pdfLaTeX), or preview and print to PDF.
       </p>
     </section>
 
@@ -227,5 +224,6 @@
     <span class="coords">12.9716 N / 77.5946 E</span>
     <a href="https://medium.com/@anrgbndhu" target="_blank" rel="noopener noreferrer">Medium</a>
   </footer>
+  <div th:replace="~{fragments :: resumeGate}"></div>
 </body>
 </html>

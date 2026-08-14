@@ -12,9 +12,29 @@
       <a href="/#about">About</a>
     </nav>
     <div class="chrome-actions no-print">
-      <a class="btn btn-primary btn-compact" href="/resume.tex" download>LaTeX</a>
+      <a class="btn btn-primary btn-compact" href="/resume.tex" data-resume-download>LaTeX</a>
       <button type="button" class="icon-btn" data-theme-toggle aria-label="Toggle day and night">◐</button>
     </div>
   </header>
+
+  <dialog th:fragment="resumeGate" id="resume-gate" class="resume-gate">
+    <form method="post" action="/resume.tex">
+      <p class="eyebrow">LaTeX resume</p>
+      <p class="gate-copy">Leave an email so I know who asked. The file includes my phone. This page does not.</p>
+      <label class="gate-label">
+        Email
+        <input type="email" name="email" required maxlength="200" autocomplete="email"/>
+      </label>
+      <label class="gate-label">
+        Name <span class="gate-optional">(optional)</span>
+        <input type="text" name="name" maxlength="120" autocomplete="name"/>
+      </label>
+      <input type="hidden" name="source" id="resume-gate-source" value="site"/>
+      <div class="gate-actions">
+        <button type="submit" class="btn btn-primary">Download</button>
+        <button type="button" class="btn btn-ghost" data-gate-close>Cancel</button>
+      </div>
+    </form>
+  </dialog>
 </body>
 </html>

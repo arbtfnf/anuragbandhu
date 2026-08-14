@@ -527,6 +527,61 @@ h3 {
   color: var(--muted);
 }
 
+.resume-gate {
+  width: min(22rem, calc(100% - 2rem));
+  padding: 1.25rem 1.15rem 1.1rem;
+  border: 1.5px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.resume-gate::backdrop {
+  background: rgb(0 0 0 / 45%);
+}
+
+.resume-gate .gate-copy {
+  margin: 0.65rem 0 1rem;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.resume-gate .gate-label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.resume-gate .gate-optional {
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  text-transform: none;
+}
+
+.resume-gate input {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.55rem 0.6rem;
+  border: 1.5px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 15px;
+}
+
+.resume-gate .gate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-top: 1rem;
+}
+
 .resume-body {
   background: var(--bg);
 }

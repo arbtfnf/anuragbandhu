@@ -8,7 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -40,7 +42,9 @@ class SiteWebTests {
                 .andExpect(content().string(containsString("25 Feb 2018")))
                 .andExpect(content().string(containsString("Credit Saison")))
                 .andExpect(content().string(containsString("co-lending")))
-                .andExpect(content().string(containsString("leetcode.com/anuragbandhu007")));
+                .andExpect(content().string(containsString("leetcode.com/anuragbandhu007")))
+                .andExpect(content().string(not(containsString("85532"))))
+                .andExpect(content().string(not(containsString("telephone"))));
     }
 
     @Test
@@ -56,9 +60,17 @@ class SiteWebTests {
                 .andExpect(content().string(containsString("Saison Omni")))
                 .andExpect(content().string(containsString("co-lending")))
                 .andExpect(content().string(containsString("Techkriti")))
-                .andExpect(content().string(containsString("ClaudeGravity")));
+                .andExpect(content().string(containsString("ClaudeGravity")))
+                .andExpect(content().string(containsString("85532")));
 
         mockMvc.perform(get("/resume.tex"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", containsString("/resume?download=1")));
+
+        mockMvc.perform(post("/resume.tex")
+                        .param("email", "recruiter@example.com")
+                        .param("name", "Test Recruiter")
+                        .param("source", "test"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.parseMediaType("application/x-tex")))
                 .andExpect(header().string("Content-Disposition", containsString("Anurag_Rakesh_Bandhu_Resume.tex")))
@@ -66,6 +78,7 @@ class SiteWebTests {
                 .andExpect(content().string(containsString("Netsmart")))
                 .andExpect(content().string(containsString("CommScope")))
                 .andExpect(content().string(containsString("Software Engineering Intern")))
+                .andExpect(content().string(containsString("85532")))
                 .andExpect(content().string(containsString("\\%")));
     }
 
@@ -81,6 +94,8 @@ class SiteWebTests {
                 .andExpect(jsonPath("$.writing[0].tags[0]").value("ai-agent"))
                 .andExpect(jsonPath("$.person.leetcodeHandle").value("anuragbandhu007"))
                 .andExpect(jsonPath("$.hackathons[0].name").value("Yes Bank Datathon"))
-                .andExpect(jsonPath("$.hackathons[0].result").value("Winner"));
+                .andExpect(jsonPath("$.hackathons[0].result").value("Winner"))
+                .andExpect(jsonPath("$.person.phoneDisplay").doesNotExist())
+                .andExpect(jsonPath("$.person.phoneHref").doesNotExist());
     }
 }

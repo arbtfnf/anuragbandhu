@@ -19,7 +19,7 @@ Open [http://localhost:8080](http://localhost:8080).
 | --- | --- |
 | `/` | Site |
 | `/resume` | One-page preview |
-| `/resume.tex` | LaTeX download |
+| `/resume.tex` | LaTeX download (POST with email; GET redirects to the gate) |
 | `/api` | JSON |
 
 ```bash
@@ -47,6 +47,8 @@ npx vercel --prod --yes
 Or connect [github.com/arbtfnf/anuragbandhu](https://github.com/arbtfnf/anuragbandhu) in the Vercel dashboard. Every push to `main` then rebuilds.
 
 First request after idle can take a few seconds (JVM cold start). After that it stays warm for a few minutes.
+
+Phone number is on the resume file only, not the public homepage. Downloads require an email. Each download is logged (`resume.download ...`) in Vercel logs and, locally, appended to `data/resume-downloads.jsonl` (not committed).
 
 ## GitHub CI
 

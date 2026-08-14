@@ -12,7 +12,7 @@
     <div class="toolbar-row">
       <a class="chrome-back" href="/">Site</a>
       <div class="toolbar-actions">
-        <a class="btn btn-ghost" href="/resume.tex" download>Download LaTeX</a>
+        <a class="btn btn-ghost" href="/resume.tex" data-resume-download>Download LaTeX</a>
         <button type="button" class="btn btn-primary" onclick="window.print()">Print / PDF</button>
         <button type="button" class="icon-btn" data-theme-toggle aria-label="Toggle day and night">◐</button>
       </div>
@@ -107,5 +107,6 @@
       <p th:text="${resume.education().degree()}">degree</p>
     </section>
   </article>
+  <div th:replace="~{fragments :: resumeGate}"></div>
 </body>
 </html>
