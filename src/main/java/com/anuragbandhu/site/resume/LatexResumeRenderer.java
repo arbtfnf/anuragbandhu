@@ -10,6 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class LatexResumeRenderer {
 
+    private final MetricEmphasis metrics;
+
+    public LatexResumeRenderer(MetricEmphasis metrics) {
+        this.metrics = metrics;
+    }
+
     public String render(ResumeDocument resume) {
         Person person = resume.person();
         StringBuilder tex = new StringBuilder();
@@ -64,7 +70,7 @@ public class LatexResumeRenderer {
             if (role.hasBullets()) {
                 tex.append("\\begin{itemize}\n");
                 for (String bullet : role.bullets()) {
-                    tex.append("  \\item ").append(LatexEscaper.text(bullet)).append("\n");
+                    tex.append("  \\item ").append(metrics.latex(bullet)).append("\n");
                 }
                 tex.append("\\end{itemize}\n");
             } else {
@@ -101,7 +107,7 @@ public class LatexResumeRenderer {
         tex.append("\\section{Leadership \\& Achievements}\n");
         for (Leadership item : resume.leadership()) {
             tex.append("\\textbf{").append(LatexEscaper.text(item.title())).append(":} ");
-            tex.append(LatexEscaper.text(item.body())).append("\\\\\n");
+            tex.append(metrics.latex(item.body())).append("\\\\\n");
         }
         tex.append("\n");
 

@@ -736,6 +736,15 @@ h3 {
   margin: 0.12rem 0;
 }
 
+.paper .metric {
+  font-weight: 800;
+  color: #9b1c00;
+  background: #ffd4c8;
+  padding: 0 0.14em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 @media (max-width: 720px) {
   .chrome-top {
     position: sticky;

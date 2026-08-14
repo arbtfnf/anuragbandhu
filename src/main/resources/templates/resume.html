@@ -57,7 +57,7 @@
           <span class="paper-dates" th:text="${role.dates()}">dates</span>
         </p>
         <ul th:if="${role.hasBullets()}">
-          <li th:each="bullet : ${role.bullets()}" th:text="${bullet}"></li>
+          <li th:each="bullet : ${role.bullets()}" th:utext="${@metricEmphasis.html(bullet)}"></li>
         </ul>
       </div>
     </section>
@@ -94,7 +94,7 @@
       <h2>Leadership &amp; Achievements</h2>
       <p th:each="item : ${resume.leadership()}">
         <strong th:text="${item.title() + ':'}">Title:</strong>
-        <span th:text="${item.body()}">body</span>
+        <span th:utext="${@metricEmphasis.html(item.body())}">body</span>
       </p>
     </section>
 
