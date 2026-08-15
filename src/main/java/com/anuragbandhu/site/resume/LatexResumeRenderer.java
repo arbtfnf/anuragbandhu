@@ -108,12 +108,10 @@ public class LatexResumeRenderer {
         if (resume.hasWriting()) {
             tex.append("\\section{Medium}\n");
             for (Writing piece : resume.writing()) {
-                tex.append("\\textbf{\\href{").append(piece.href()).append("}{")
-                        .append(LatexEscaper.text(piece.title())).append("}}");
-                tex.append(" \\hfill ").append(LatexEscaper.text(piece.published())).append("\\\\\n");
-                tex.append(LatexEscaper.text(piece.summary())).append("\\\\\n");
-                tex.append("\\vspace{4pt}\n\n");
+                tex.append("\\href{").append(piece.href()).append("}{")
+                        .append(LatexEscaper.text(piece.title())).append("}\\\\\n");
             }
+            tex.append("\n");
         }
 
         tex.append("\\section{Leadership \\& Achievements}\n");

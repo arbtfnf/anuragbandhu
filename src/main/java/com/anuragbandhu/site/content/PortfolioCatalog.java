@@ -48,6 +48,9 @@ public class PortfolioCatalog {
             "commscope", "ceph", "redhat"
     );
 
+    private static final String RESUME_MEDIUM_TITLE =
+            "We Had 20+ AI Agents and No Way to Know If They Were Any Good. So I Built One.";
+
     public SiteModel site() {
         return site;
     }
@@ -73,7 +76,9 @@ public class PortfolioCatalog {
                         .filter(project -> RESUME_PROJECT_IDS.contains(project.id()))
                         .map(PortfolioCatalog::forResume)
                         .toList(),
-                site.writing(),
+                site.writing().stream()
+                        .filter(piece -> RESUME_MEDIUM_TITLE.equals(piece.title()))
+                        .toList(),
                 List.of(
                         new Leadership(
                                 "Yes Bank Datathon 2019",
@@ -110,9 +115,8 @@ public class PortfolioCatalog {
                     "Backend on Saison Omni, Credit Saison's co-lending platform: banks and NBFCs from origination through loan management.",
                     "Partner-facing APIs and LMS sync; stayed with partner go-lives in a regulated NBFC environment."
             ));
-            case "trippe" -> withBullets(role, List.of(
-                    "Designed and architected an itinerary planner using a Bloom filter.",
-                    "PostgreSQL JSONB GIN indexes then Redis persona feeds: tag search 8,934ms to 5ms (34ms with indexes alone)."
+            case "trippe" -> withBullets(role, "Java, Spring Boot, PostgreSQL, Redis, React, AWS", List.of(
+                    "Designed and built a travel itinerary planner from scratch using a Bloom filter."
             ));
             default -> role;
         };
