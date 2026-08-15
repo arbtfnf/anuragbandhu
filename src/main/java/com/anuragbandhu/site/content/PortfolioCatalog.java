@@ -99,10 +99,10 @@ public class PortfolioCatalog {
         return switch (role.id()) {
             case "netsmart" -> withBullets(role, "Java, Spring Boot, OpenSearch, AWS", List.of(
                     "Platform team on CareFabric, Netsmart's healthcare interoperability layer: ~3 billion clinical messages per month (~1,150/sec, 24/7).",
-                    "OpenSearch prod incident (Dec 2025): cluster yellow, ~70 unassigned replicas, heap 92-98%, fielddata CircuitBreakerExceptions. No-sort queries defaulted to _id. Changed paging default to _doc. After deploy: heap under 80%, 0 unassigned, green. Explicit orderBy untouched.",
-                    "Production on-call, 14 rotations in 12 months. Closed 9 production Inbox defects, including one that passed QA and failed in prod.",
-                    "Migrated the Inbox Admin Tool onto the platform SDK (Java 21, Spring Boot 3.x). Delivered 14 FHIR resources as first-class search/store types.",
-                    "Implemented FHIR _lastUpdated across a multi-repository data store. Closed an unmerged 74-repository PR, then split schema and query into two reviewable changes."
+                    "Delivered 14 FHIR resources as first-class search/store types. Migrated the Inbox Admin Tool onto the platform SDK (Java 21, Spring Boot 3.x).",
+                    "Implemented FHIR _lastUpdated across a multi-repository data store. Closed an unmerged 74-repository PR, then split schema and query into two reviewable changes.",
+                    "Created AI agents in Kiro CLI wired to local docs and codebase context.",
+                    "Production on-call and prod incident support: 14 rotations in 12 months; 9 Inbox defects, including one that passed QA; Dec 2025 OpenSearch yellow cluster restored to green (_id paging default to _doc)."
             ));
             case "zeitview" -> withBullets(role, List.of(
                     "Modeled Elasticsearch to PostgreSQL as a DAG in Java (JGraphT): topological load order so children never landed before parents; DFS/SCC for cycles.",
@@ -114,6 +114,7 @@ public class PortfolioCatalog {
                     "Partner-facing APIs and LMS sync; stayed with partner go-lives in a regulated NBFC environment."
             ));
             case "trippe" -> withBullets(role, List.of(
+                    "Designed and architected an itinerary planner using a Bloom filter.",
                     "PostgreSQL JSONB GIN indexes then Redis persona feeds: tag search 8,934ms to 5ms (34ms with indexes alone)."
             ));
             default -> role;
@@ -314,6 +315,7 @@ public class PortfolioCatalog {
                         "Java, Spring Boot, PostgreSQL, Redis, React, Android, AWS",
                         "/work/trippe",
                         List.of(
+                                "Designed and architected an itinerary planner using a Bloom filter.",
                                 "Built the backend for a travel-commerce product that matched travelers with local guides and shared trips: trip planning, locations, diaries, community, tags, ratings, and referrals, from first service to production.",
                                 "Split the platform into Spring Boot microservices (Java 8, JPA): auth, content, recommendation, and communicator (email, SMS, push), plus a shared Java SDK so services talked over REST (Retrofit) instead of a monolith.",
                                 "Indexed the trip store in PostgreSQL for how people actually search: JSONB GIN on tags (no full-text search), partial indexes that skip soft-deletes, GiST for nearby locations. On a million trip records, tag search 8,934ms to 34ms, location queries 5,247ms to 89ms, a user's trips 2,156ms to 12ms.",
