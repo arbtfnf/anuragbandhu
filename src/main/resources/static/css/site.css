@@ -689,8 +689,13 @@ h3 {
 }
 
 .paper-contact a {
-  color: #1a1a1a;
-  text-decoration: none;
+  color: var(--link, #1a56db);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.paper-contact a:hover {
+  color: var(--text);
 }
 
 .paper section {
@@ -897,6 +902,12 @@ h3 {
 
   a {
     text-decoration: none;
+  }
+
+  .paper-contact a {
+    color: #111;
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
   .section,

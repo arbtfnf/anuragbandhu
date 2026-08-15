@@ -44,10 +44,6 @@ public class PortfolioCatalog {
 
     private static final Set<String> RESUME_PROJECT_IDS = Set.of("notebook");
 
-    private static final Set<String> RESUME_EARLIER_IDS = Set.of(
-            "commscope", "ceph", "redhat"
-    );
-
     private static final String RESUME_MEDIUM_TITLE =
             "We Had 20+ AI Agents and No Way to Know If They Were Any Good. So I Built One.";
 
@@ -64,18 +60,15 @@ public class PortfolioCatalog {
                 .filter(role -> RESUME_ROLE_IDS.contains(role.id()))
                 .map(PortfolioCatalog::forResume)
                 .toList();
-        List<Role> earlier = site.experience().stream()
-                .filter(role -> RESUME_EARLIER_IDS.contains(role.id()))
-                .toList();
         return new ResumeDocument(
                 site.person(),
                 resumeSkills(),
                 roles,
-                earlier,
                 site.projects().stream()
                         .filter(project -> RESUME_PROJECT_IDS.contains(project.id()))
                         .map(PortfolioCatalog::forResume)
                         .toList(),
+                List.of(),
                 site.writing().stream()
                         .filter(piece -> RESUME_MEDIUM_TITLE.equals(piece.title()))
                         .toList(),
@@ -85,8 +78,12 @@ public class PortfolioCatalog {
                                 "Winner. Techkriti, IIT Kanpur: campus datathon on banking data problems, judged on the model and the pitch."
                         )
                 ),
-                site.education()
+                resumeEducation()
         );
+    }
+
+    private Education resumeEducation() {
+        return new Education(site.education().school(), "BE, CSE", "", "2020");
     }
 
     private static Skills resumeSkills() {
@@ -115,7 +112,7 @@ public class PortfolioCatalog {
                     "Backend on Saison Omni, Credit Saison's co-lending platform: banks and NBFCs from origination through loan management.",
                     "Partner-facing APIs and LMS sync; stayed with partner go-lives in a regulated NBFC environment."
             ));
-            case "trippe" -> withBullets(role, "Java, Spring Boot, PostgreSQL, Redis, React, AWS", List.of(
+            case "trippe" -> withBullets(role, "Software Developer", "Java, Spring Boot, SQL, React, AWS", List.of(
                     "Designed and built a travel itinerary planner from scratch using a Bloom filter."
             ));
             default -> role;
@@ -127,10 +124,14 @@ public class PortfolioCatalog {
     }
 
     private static Role withBullets(Role role, String stack, List<String> bullets) {
+        return withBullets(role, role.title(), stack, bullets);
+    }
+
+    private static Role withBullets(Role role, String title, String stack, List<String> bullets) {
         return new Role(
                 role.id(),
                 role.company(),
-                role.title(),
+                title,
                 role.kind(),
                 role.location(),
                 role.start(),

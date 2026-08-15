@@ -80,12 +80,11 @@ public class LatexResumeRenderer {
             tex.append("\n");
         }
 
-        if (resume.hasEarlier()) {
-            tex.append("\\section{Earlier}\n");
-            for (Role role : resume.earlier()) {
-                tex.append("\\textbf{").append(LatexEscaper.text(role.company())).append("}");
-                tex.append(" $|$ ").append(LatexEscaper.text(role.title()));
-                tex.append(" \\hfill ").append(LatexEscaper.text(role.dates())).append("\\\\\n");
+        if (resume.hasOpenSource()) {
+            tex.append("\\section{Open Source Contribution}\n");
+            for (Leadership item : resume.openSource()) {
+                tex.append("\\textbf{").append(LatexEscaper.text(item.title())).append(":} ");
+                tex.append(metrics.latex(item.body())).append("\\\\\n");
             }
             tex.append("\n");
         }
@@ -122,9 +121,17 @@ public class LatexResumeRenderer {
         tex.append("\n");
 
         tex.append("\\section{Education}\n");
-        tex.append("\\textbf{").append(LatexEscaper.text(resume.education().school())).append("}");
-        tex.append(" \\hfill ").append(LatexEscaper.text(resume.education().dates())).append("\\\\\n");
-        tex.append(LatexEscaper.text(resume.education().degree())).append("\n\n");
+        if (resume.education().isCompact()) {
+            tex.append("\\textbf{").append(LatexEscaper.text(resume.education().school())).append("}");
+            if (resume.education().degree() != null && !resume.education().degree().isBlank()) {
+                tex.append(" $|$ ").append(LatexEscaper.text(resume.education().degree()));
+            }
+            tex.append(" \\hfill ").append(LatexEscaper.text(resume.education().dates())).append("\\\\\n\n");
+        } else {
+            tex.append("\\textbf{").append(LatexEscaper.text(resume.education().school())).append("}");
+            tex.append(" \\hfill ").append(LatexEscaper.text(resume.education().dates())).append("\\\\\n");
+            tex.append(LatexEscaper.text(resume.education().degree())).append("\n\n");
+        }
 
         tex.append("\\end{document}\n");
         return tex.toString();

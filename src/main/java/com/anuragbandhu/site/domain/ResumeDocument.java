@@ -7,8 +7,8 @@ public record ResumeDocument(
         Person person,
         Skills skills,
         List<Role> roles,
-        List<Role> earlier,
         List<Project> projects,
+        List<Leadership> openSource,
         List<Writing> writing,
         List<Leadership> leadership,
         Education education
@@ -17,8 +17,8 @@ public record ResumeDocument(
         return person.name().replace(' ', '_') + "_Resume";
     }
 
-    public boolean hasEarlier() {
-        return earlier != null && !earlier.isEmpty();
+    public boolean hasOpenSource() {
+        return openSource != null && !openSource.isEmpty();
     }
 
     public boolean hasWriting() {

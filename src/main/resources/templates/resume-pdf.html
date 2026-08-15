@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title th:text="${person.name()}">Resume</title>
+  <style>
+    @page {
+      size: letter;
+      margin: 0.45in;
+    }
+
+    body {
+      margin: 0;
+      color: #111;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.35;
+    }
+
+    .paper {
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24pt;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .paper-contact {
+      margin: 0.35rem 0 0;
+      text-align: center;
+      font-size: 9pt;
+    }
+
+    .paper-contact a {
+      color: #111;
+      text-decoration: underline;
+    }
+
+    section {
+      margin-top: 0.7rem;
+    }
+
+    h2 {
+      margin: 0 0 0.3rem;
+      font-size: 9.5pt;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #111;
+      padding-bottom: 0.12rem;
+    }
+
+    p {
+      margin: 0 0 0.25rem;
+    }
+
+    .paper-job {
+      margin-bottom: 0.4rem;
+    }
+
+    .paper-role {
+      margin: 0 0 0.1rem;
+    }
+
+    .paper-dates {
+      float: right;
+      font-size: 9pt;
+    }
+
+    ul {
+      margin: 0.12rem 0 0;
+      padding-left: 1rem;
+    }
+
+    li {
+      margin: 0.1rem 0;
+    }
+
+    .metric {
+      font-weight: 800;
+    }
+
+    a {
+      color: #111;
+    }
+  </style>
+</head>
+<body>
+  <article th:replace="~{fragments :: resumePaper}"></article>
+</body>
+</html>

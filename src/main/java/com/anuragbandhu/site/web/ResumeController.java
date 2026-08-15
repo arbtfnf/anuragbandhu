@@ -4,6 +4,7 @@ import com.anuragbandhu.site.content.PortfolioCatalog;
 import com.anuragbandhu.site.domain.ResumeDocument;
 import com.anuragbandhu.site.resume.LatexResumeRenderer;
 import com.anuragbandhu.site.resume.ResumeDownloadLog;
+import com.anuragbandhu.site.resume.ResumePdfRenderer;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -25,15 +26,18 @@ public class ResumeController {
 
     private final PortfolioCatalog catalog;
     private final LatexResumeRenderer latex;
+    private final ResumePdfRenderer pdf;
     private final ResumeDownloadLog downloads;
 
     public ResumeController(
             PortfolioCatalog catalog,
             LatexResumeRenderer latex,
+            ResumePdfRenderer pdf,
             ResumeDownloadLog downloads
     ) {
         this.catalog = catalog;
         this.latex = latex;
+        this.pdf = pdf;
         this.downloads = downloads;
     }
 
@@ -43,6 +47,17 @@ public class ResumeController {
         model.addAttribute("person", resume.person());
         model.addAttribute("resume", resume);
         return "resume";
+    }
+
+    @GetMapping("/resume.pdf")
+    public ResponseEntity<byte[]> downloadPdf() {
+        ResumeDocument resume = catalog.resume();
+        byte[] body = pdf.render(resume);
+        String filename = resume.fileStem() + ".pdf";
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .body(body);
     }
 
     @GetMapping("/resume.tex")
