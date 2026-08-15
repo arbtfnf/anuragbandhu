@@ -47,6 +47,14 @@ public class PortfolioCatalog {
     private static final String RESUME_MEDIUM_TITLE =
             "We Had 20+ AI Agents and No Way to Know If They Were Any Good. So I Built One.";
 
+    private static final String RESUME_SUMMARY =
+            "Senior Software Engineer building healthcare interoperability on CareFabric, a platform moving "
+                    + "3 billion clinical messages per month with 24/7 reliability. Delivered FHIR resources as "
+                    + "first-class search and store types, migrated the Inbox Admin Tool onto a Java 21 and "
+                    + "Spring Boot 3.x SDK, and split a 74-repository change into reviewable schema and query "
+                    + "merges. Strengthens production stability through on-call incident response, FHIR "
+                    + "_lastUpdated support, and workflow automation that was published internally and on Medium.";
+
     public SiteModel site() {
         return site;
     }
@@ -62,6 +70,7 @@ public class PortfolioCatalog {
                 .toList();
         return new ResumeDocument(
                 site.person(),
+                RESUME_SUMMARY,
                 resumeSkills(),
                 roles,
                 site.projects().stream()
@@ -75,7 +84,7 @@ public class PortfolioCatalog {
                 List.of(
                         new Leadership(
                                 "Yes Bank Datathon 2019",
-                                "Winner. Techkriti, IIT Kanpur: campus datathon on banking data problems, judged on the model and the pitch."
+                                "First at Techkriti, IIT Kanpur: Yes Bank campus datathon on banking data, judged on the model and the pitch."
                         )
                 ),
                 resumeEducation()
@@ -97,23 +106,23 @@ public class PortfolioCatalog {
     private static Role forResume(Role role) {
         return switch (role.id()) {
             case "netsmart" -> withBullets(role, "Java, Spring Boot, OpenSearch, AWS", List.of(
-                    "Platform team on CareFabric, Netsmart's healthcare interoperability layer: ~3 billion clinical messages per month (~1,150/sec, 24/7).",
-                    "Delivered 14 FHIR resources as first-class search/store types. Migrated the Inbox Admin Tool onto the platform SDK (Java 21, Spring Boot 3.x).",
-                    "Implemented FHIR _lastUpdated across a multi-repository data store. Withdrew a single 74-repository PR and split schema and query into two reviewable changes that merged.",
-                    "Built workflow agents in Kiro CLI wired to local docs and codebase context; published on Medium (100/100 Workflow Agent blueprint) and into Netsmart's AI skills repository, the only submission from India.",
-                    "Production on-call and prod incident support: 14 rotations in 12 months; 9 Inbox defects, including one that passed QA; Dec 2025 OpenSearch yellow cluster restored to green (_id paging default to _doc)."
+                    "On CareFabric, Netsmart's healthcare interoperability layer: ~3 billion clinical messages per month (~1,150/sec, 24/7).",
+                    "Shipped 14 FHIR resources as first-class search/store types; moved the Inbox Admin Tool onto the platform SDK (Java 21, Spring Boot 3.x).",
+                    "FHIR _lastUpdated across a multi-repository data store; withdrew one 74-repository PR and split schema and query into two reviewable changes that merged.",
+                    "Workflow agents in Kiro CLI tied to local docs and codebase context; Medium post (100/100 Workflow Agent blueprint) plus Netsmart's AI skills repo, the only submission from India.",
+                    "On-call in prod: 14 rotations in 12 months; 9 Inbox defects, one that passed QA; Dec 2025 OpenSearch yellow cluster back to green (_id paging default to _doc)."
             ));
             case "zeitview" -> withBullets(role, List.of(
-                    "Modeled Elasticsearch to PostgreSQL as a DAG in Java (JGraphT): topological load order so children never landed before parents; DFS/SCC for cycles.",
-                    "Flattened nested Elasticsearch arrays into junction tables; validated with counts, checksums, and rollback on failure.",
-                    "Ran independent DAG levels in parallel (~60% of tables), cutting estimated migration from 3 days to 18 hours. Ephemeral DBs for tests; ~90% coverage."
+                    "Elasticsearch-to-PostgreSQL migration as a Java DAG (JGraphT): topological load order so children never landed before parents; DFS/SCC for cycles.",
+                    "Nested Elasticsearch arrays became junction tables; counts, checksums, and rollback on failure.",
+                    "Independent DAG levels ran in parallel (~60% of tables), cutting estimated migration from 3 days to 18 hours. Ephemeral DBs for tests; ~90% coverage."
             ));
             case "credit-saison" -> withBullets(role, List.of(
                     "Backend on Saison Omni, Credit Saison's co-lending platform: banks and NBFCs from origination through loan management.",
-                    "Partner-facing APIs and LMS sync; stayed with partner go-lives in a regulated NBFC environment."
+                    "Partner-facing APIs and LMS sync through go-lives in a regulated NBFC environment."
             ));
             case "trippe" -> withBullets(role, "Software Developer", "Java, Spring Boot, SQL, React, AWS", List.of(
-                    "Designed and built a travel itinerary planner from scratch using a Bloom filter."
+                    "From scratch: a travel itinerary planner using a Bloom filter."
             ));
             default -> role;
         };

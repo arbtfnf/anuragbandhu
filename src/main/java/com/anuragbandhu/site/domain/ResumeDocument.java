@@ -5,6 +5,7 @@ import java.util.List;
 /** One-page application resume, tighter than the public site timeline. */
 public record ResumeDocument(
         Person person,
+        String summary,
         Skills skills,
         List<Role> roles,
         List<Project> projects,
@@ -15,6 +16,10 @@ public record ResumeDocument(
 ) {
     public String fileStem() {
         return person.name().replace(' ', '_') + "_Resume";
+    }
+
+    public boolean hasSummary() {
+        return summary != null && !summary.isBlank();
     }
 
     public boolean hasOpenSource() {
