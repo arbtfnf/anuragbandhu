@@ -73,11 +73,8 @@ public class PortfolioCatalog {
                         .filter(project -> RESUME_PROJECT_IDS.contains(project.id()))
                         .map(PortfolioCatalog::forResume)
                         .toList(),
+                site.writing(),
                 List.of(
-                        new Leadership(
-                                "techNIEks Hackathon 2018",
-                                "Winner. One-day IEEE NISB hackathon at NIE Mysuru (25 Feb 2018): prototype and live demo."
-                        ),
                         new Leadership(
                                 "Yes Bank Datathon 2019",
                                 "Winner. Techkriti, IIT Kanpur: campus datathon on banking data problems, judged on the model and the pitch."

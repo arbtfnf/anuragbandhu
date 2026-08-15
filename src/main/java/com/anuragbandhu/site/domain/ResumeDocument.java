@@ -9,6 +9,7 @@ public record ResumeDocument(
         List<Role> roles,
         List<Role> earlier,
         List<Project> projects,
+        List<Writing> writing,
         List<Leadership> leadership,
         Education education
 ) {
@@ -18,5 +19,9 @@ public record ResumeDocument(
 
     public boolean hasEarlier() {
         return earlier != null && !earlier.isEmpty();
+    }
+
+    public boolean hasWriting() {
+        return writing != null && !writing.isEmpty();
     }
 }

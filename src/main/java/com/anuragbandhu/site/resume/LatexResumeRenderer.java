@@ -5,6 +5,7 @@ import com.anuragbandhu.site.domain.Person;
 import com.anuragbandhu.site.domain.Project;
 import com.anuragbandhu.site.domain.ResumeDocument;
 import com.anuragbandhu.site.domain.Role;
+import com.anuragbandhu.site.domain.Writing;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -102,6 +103,17 @@ public class LatexResumeRenderer {
             tex.append(" \\hfill ").append(LatexEscaper.text(project.period())).append("\\\\\n");
             tex.append(LatexEscaper.text(project.summary())).append("\n");
             tex.append("\\vspace{6pt}\n\n");
+        }
+
+        if (resume.hasWriting()) {
+            tex.append("\\section{Medium}\n");
+            for (Writing piece : resume.writing()) {
+                tex.append("\\textbf{\\href{").append(piece.href()).append("}{")
+                        .append(LatexEscaper.text(piece.title())).append("}}");
+                tex.append(" \\hfill ").append(LatexEscaper.text(piece.published())).append("\\\\\n");
+                tex.append(LatexEscaper.text(piece.summary())).append("\\\\\n");
+                tex.append("\\vspace{4pt}\n\n");
+            }
         }
 
         tex.append("\\section{Leadership \\& Achievements}\n");

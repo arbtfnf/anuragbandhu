@@ -90,6 +90,19 @@
       </div>
     </section>
 
+    <section th:if="${resume.hasWriting()}">
+      <h2>Medium</h2>
+      <div class="paper-job" th:each="piece : ${resume.writing()}">
+        <p class="paper-role">
+          <strong>
+            <a th:href="${piece.href()}" th:text="${piece.title()}" target="_blank" rel="noopener noreferrer">Title</a>
+          </strong>
+          <span class="paper-dates" th:text="${piece.published()}">date</span>
+        </p>
+        <p th:text="${piece.summary()}"></p>
+      </div>
+    </section>
+
     <section>
       <h2>Leadership &amp; Achievements</h2>
       <p th:each="item : ${resume.leadership()}">
