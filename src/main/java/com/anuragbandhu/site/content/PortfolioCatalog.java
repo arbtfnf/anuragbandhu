@@ -75,10 +75,6 @@ public class PortfolioCatalog {
                         .toList(),
                 List.of(
                         new Leadership(
-                                "Technical mentorship",
-                                "Bi-weekly sessions on distributed systems and code quality; onboarded 3 junior engineers at Netsmart."
-                        ),
-                        new Leadership(
                                 "techNIEks Hackathon 2018",
                                 "Winner. One-day IEEE NISB hackathon at NIE Mysuru (25 Feb 2018): prototype and live demo."
                         ),
@@ -101,7 +97,7 @@ public class PortfolioCatalog {
 
     private static Role forResume(Role role) {
         return switch (role.id()) {
-            case "netsmart" -> withBullets(role, List.of(
+            case "netsmart" -> withBullets(role, "Java, Spring Boot, OpenSearch, AWS", List.of(
                     "Platform team on CareFabric, Netsmart's healthcare interoperability layer: ~3 billion clinical messages per month (~1,150/sec, 24/7).",
                     "OpenSearch prod incident (Dec 2025): cluster yellow, ~70 unassigned replicas, heap 92-98%, fielddata CircuitBreakerExceptions. No-sort queries defaulted to _id. Changed paging default to _doc. After deploy: heap under 80%, 0 unassigned, green. Explicit orderBy untouched.",
                     "Production on-call, 14 rotations in 12 months. Closed 9 production Inbox defects, including one that passed QA and failed in prod.",
@@ -125,6 +121,10 @@ public class PortfolioCatalog {
     }
 
     private static Role withBullets(Role role, List<String> bullets) {
+        return withBullets(role, role.stack(), bullets);
+    }
+
+    private static Role withBullets(Role role, String stack, List<String> bullets) {
         return new Role(
                 role.id(),
                 role.company(),
@@ -133,7 +133,7 @@ public class PortfolioCatalog {
                 role.location(),
                 role.start(),
                 role.end(),
-                role.stack(),
+                stack,
                 role.href(),
                 bullets
         );
