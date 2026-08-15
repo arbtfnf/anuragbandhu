@@ -65,11 +65,4 @@
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") closeNav();
   });
-    const gate = document.getElementById("resume-gate");
-    if (gate && typeof gate.showModal === "function") {
-      const source = document.getElementById("resume-gate-source");
-      if (source) source.value = "resume-link";
-      gate.showModal();
-    }
-  }
 })();

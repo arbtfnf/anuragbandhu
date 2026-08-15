@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title th:text="${person.name() + ' / Resume'}">Resume</title>
+  <title th:text="${person.name()}">Anurag Rakesh Bandhu</title>
   <meta name="description" content="One-page resume. Download LaTeX or print to PDF."/>
   <th:block th:replace="~{fonts :: headLinks}"/>
 </head>
@@ -18,7 +18,8 @@
       </div>
     </div>
     <p class="toolbar-hint">
-      Overleaf-ready .tex (pdfLaTeX). Same dates as this page.
+      For a clean PDF, turn off <strong>Headers and footers</strong> in the print dialog (removes date and page title).
+      Same content as the LaTeX download.
     </p>
   </div>
 
@@ -115,5 +116,6 @@
     </section>
   </article>
   <div th:replace="~{fragments :: resumeGate}"></div>
+  <script th:src="@{/js/resume-print.js}"></script>
 </body>
 </html>
