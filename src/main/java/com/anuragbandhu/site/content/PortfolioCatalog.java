@@ -101,7 +101,7 @@ public class PortfolioCatalog {
                     "Platform team on CareFabric, Netsmart's healthcare interoperability layer: ~3 billion clinical messages per month (~1,150/sec, 24/7).",
                     "Delivered 14 FHIR resources as first-class search/store types. Migrated the Inbox Admin Tool onto the platform SDK (Java 21, Spring Boot 3.x).",
                     "Implemented FHIR _lastUpdated across a multi-repository data store. Withdrew a single 74-repository PR and split schema and query into two reviewable changes that merged.",
-                    "Created AI agents in Kiro CLI wired to local docs and codebase context; published into Netsmart's AI skills repository, the only submission from India.",
+                    "Built workflow agents in Kiro CLI wired to local docs and codebase context; published on Medium (100/100 Workflow Agent blueprint) and into Netsmart's AI skills repository, the only submission from India.",
                     "Production on-call and prod incident support: 14 rotations in 12 months; 9 Inbox defects, including one that passed QA; Dec 2025 OpenSearch yellow cluster restored to green (_id paging default to _doc)."
             ));
             case "zeitview" -> withBullets(role, List.of(
