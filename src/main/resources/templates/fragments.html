@@ -56,11 +56,6 @@
       </p>
     </header>
 
-    <section th:if="${resume.hasSummary}">
-      <h2>Professional Summary</h2>
-      <p class="paper-summary" th:utext="${@metricEmphasis.html(resume.summary())}">Summary</p>
-    </section>
-
     <section>
       <h2>Skills</h2>
       <p><strong>Languages:</strong> <span th:text="${resume.skills().languagesLine()}"></span></p>

@@ -52,11 +52,6 @@ public class LatexResumeRenderer {
                 .append(LatexEscaper.text(person.phoneDisplay())).append("}\n");
         tex.append("\\end{center}\n\n");
 
-        if (resume.hasSummary()) {
-            tex.append("\\section{Professional Summary}\n");
-            tex.append(metrics.latex(resume.summary())).append("\n\n");
-        }
-
         tex.append("\\section{Skills}\n");
         tex.append("\\textbf{Languages:} ")
                 .append(LatexEscaper.text(resume.skills().languagesLine())).append("\\\\\n");

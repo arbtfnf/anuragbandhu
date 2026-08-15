@@ -47,14 +47,6 @@ public class PortfolioCatalog {
     private static final String RESUME_MEDIUM_TITLE =
             "We Had 20+ AI Agents and No Way to Know If They Were Any Good. So I Built One.";
 
-    private static final String RESUME_SUMMARY =
-            "Senior Software Engineer building healthcare interoperability on CareFabric, a platform moving "
-                    + "3 billion clinical messages per month with 24/7 reliability. Delivered FHIR resources as "
-                    + "first-class search and store types, migrated the Inbox Admin Tool onto a Java 21 and "
-                    + "Spring Boot 3.x SDK, and split a 74-repository change into reviewable schema and query "
-                    + "merges. Strengthens production stability through on-call incident response, FHIR "
-                    + "_lastUpdated support, and workflow automation that was published internally and on Medium.";
-
     public SiteModel site() {
         return site;
     }
@@ -70,7 +62,6 @@ public class PortfolioCatalog {
                 .toList();
         return new ResumeDocument(
                 site.person(),
-                RESUME_SUMMARY,
                 resumeSkills(),
                 roles,
                 site.projects().stream()
