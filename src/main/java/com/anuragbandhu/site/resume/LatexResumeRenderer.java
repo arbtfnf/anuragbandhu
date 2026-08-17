@@ -55,10 +55,17 @@ public class LatexResumeRenderer {
         tex.append("\\section{Skills}\n");
         tex.append("\\textbf{Languages:} ")
                 .append(LatexEscaper.text(resume.skills().languagesLine())).append("\\\\\n");
+        if (resume.skills().hasArchitecture()) {
+            tex.append("\\textbf{Backend \\& Architecture:} ")
+                    .append(LatexEscaper.text(resume.skills().architectureLine())).append("\\\\\n");
+            tex.append("\\textbf{Data \\& Search:} ")
+                    .append(LatexEscaper.text(resume.skills().toolsLine())).append("\\\\\n");
+        } else {
+            tex.append("\\textbf{Tools \\& Frameworks:} ")
+                    .append(LatexEscaper.text(resume.skills().toolsLine())).append("\\\\\n");
+        }
         tex.append("\\textbf{Cloud \\& Infrastructure:} ")
-                .append(LatexEscaper.text(resume.skills().cloudLine())).append("\\\\\n");
-        tex.append("\\textbf{Tools \\& Frameworks:} ")
-                .append(LatexEscaper.text(resume.skills().toolsLine())).append("\n\n");
+                .append(LatexEscaper.text(resume.skills().cloudLine())).append("\n\n");
 
         tex.append("\\section{Experience}\n");
         for (Role role : resume.roles()) {
@@ -89,7 +96,7 @@ public class LatexResumeRenderer {
             tex.append("\n");
         }
 
-        tex.append("\\section{Projects}\n");
+        tex.append("\\section{Projects \\& Technical Publications}\n");
         for (Project project : resume.projects()) {
             tex.append("\\textbf{");
             if (project.hasHref()) {

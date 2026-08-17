@@ -24,7 +24,8 @@ import java.util.Set;
  * Single source of truth for the public site. LinkedIn is the employment ledger;
  * Netsmart bullets come from the CareFabric 2025-2026 worklog. ~3 billion
  * messages/month included at the author's request. No customer names. Zeitview
- * migration bullets come from the graph-based ES-to-Postgres interview brief.
+ * migration bullets come from the graph-based ES-to-Postgres interview brief;
+ * 1.39 million records added on the resume overlay at the author's request.
  * Trippe bullets and /work/trippe come from the Redis caching guide and the
  * indexing strategy (July 2025 write-ups in the Trippe work-log), plus the
  * TrippeWorld GitHub org (private services) and the resume engagement figure.
@@ -42,10 +43,7 @@ public class PortfolioCatalog {
             "netsmart", "zeitview", "credit-saison", "trippe"
     );
 
-    private static final Set<String> RESUME_PROJECT_IDS = Set.of("notebook");
-
-    private static final String RESUME_MEDIUM_TITLE =
-            "We Had 20+ AI Agents and No Way to Know If They Were Any Good. So I Built One.";
+    private static final Set<String> RESUME_PROJECT_IDS = Set.of("notebook", "claudegravity");
 
     public SiteModel site() {
         return site;
@@ -69,13 +67,11 @@ public class PortfolioCatalog {
                         .map(PortfolioCatalog::forResume)
                         .toList(),
                 List.of(),
-                site.writing().stream()
-                        .filter(piece -> RESUME_MEDIUM_TITLE.equals(piece.title()))
-                        .toList(),
+                List.of(),
                 List.of(
                         new Leadership(
-                                "Yes Bank Datathon 2019",
-                                "First at Techkriti, IIT Kanpur: Yes Bank campus datathon on banking data, judged on the model and the pitch."
+                                "1st Place, Yes Bank Datathon 2019",
+                                "Ranked first at Techkriti, IIT Kanpur, by building a predictive model on banking data and pitching the architecture to judges."
                         )
                 ),
                 resumeEducation()
@@ -83,37 +79,39 @@ public class PortfolioCatalog {
     }
 
     private Education resumeEducation() {
-        return new Education(site.education().school(), "BE, CSE", "", "2020");
+        return new Education(site.education().school(), "BE in Computer Science", "", "2020");
     }
 
     private static Skills resumeSkills() {
         return new Skills(
-                List.of("Java", "Python", "JavaScript/TypeScript", "SQL"),
-                List.of("AWS (S3, SQS, Lambda, ECS, CloudWatch)", "Docker", "Kubernetes"),
-                List.of("Spring Boot", "REST APIs", "PostgreSQL", "Redis", "OpenSearch", "FHIR", "Elasticsearch")
+                List.of("Java (11/21)", "Python", "JavaScript/TypeScript", "SQL"),
+                List.of("AWS (ECS, Lambda, S3, Secrets Manager, CloudFormation, IAM, SES, CloudWatch)", "Docker", "Kubernetes", "CI/CD"),
+                List.of("OpenSearch / Elasticsearch", "PostgreSQL", "Redis", "JPA/Hibernate", "Schema & Index Redesign"),
+                List.of("Spring Boot 3.x", "REST APIs", "Microservices", "SDK & Contract Design", "FHIR Standards", "Distributed Systems")
         );
     }
 
     private static Role forResume(Role role) {
         return switch (role.id()) {
-            case "netsmart" -> withBullets(role, "Java, Spring Boot, OpenSearch, AWS", List.of(
-                    "On CareFabric, Netsmart's healthcare interoperability layer: ~3 billion clinical messages per month (~1,150/sec, 24/7).",
-                    "Shipped 14 FHIR resources as first-class search/store types; moved the Inbox Admin Tool onto the platform SDK (Java 21, Spring Boot 3.x).",
-                    "FHIR _lastUpdated across a multi-repository data store; withdrew one 74-repository PR and split schema and query into two reviewable changes that merged.",
-                    "Workflow agents in Kiro CLI tied to local docs and codebase context; Medium post (100/100 Workflow Agent blueprint) plus Netsmart's AI skills repo, the only submission from India.",
-                    "On-call in prod: 14 rotations in 12 months; 9 Inbox defects, one that passed QA; Dec 2025 OpenSearch yellow cluster back to green (_id paging default to _doc)."
+            case "netsmart" -> withBullets(role, "Java 21, Spring Boot 3.x, OpenSearch, AWS, FHIR", List.of(
+                    "Scaled a ~90-service healthcare interoperability platform processing ~3 billion clinical messages/month (~1,150/sec, 24/7), covering 14 production on-call rotations including an OpenSearch yellow-to-green restore (_id paging to _doc).",
+                    "Delivered 14 FHIR resources (CareTeam, CarePlan, Condition, MedicationRequest, and others) across 4 platform layers and 33 pull requests to meet HTI-1, with a unified SDK contract.",
+                    "Moved the Inbox Admin Tool to Java 21 and Spring Boot 3.x, replacing hand-maintained REST with a shared SDK contract across 8 phased deployments.",
+                    "Enabled patient-name search in OpenSearch by indexing names at write time and re-indexing DEV to QA to PROD over the existing message corpus.",
+                    "Cut write amplification on the clinical document store by separating metadata-only updates from full payload rewrites, with verification endpoints for the fast path.",
+                    "Shipped FHIR _lastUpdated across a multi-repository data store by splitting an unreviewable 74-repository change into schema and query merges.",
+                    "Hardened production security by replacing static IAM access keys with IAM roles, removing log4j and commons-collections CVEs, and covering untagged stores with AWS Backup.",
+                    "Closed 9 production Inbox defects (one that passed QA) and wrote 9 design documents ahead of the larger workstreams."
             ));
             case "zeitview" -> withBullets(role, List.of(
-                    "Elasticsearch-to-PostgreSQL migration as a Java DAG (JGraphT): topological load order so children never landed before parents; DFS/SCC for cycles.",
-                    "Nested Elasticsearch arrays became junction tables; counts, checksums, and rollback on failure.",
-                    "Independent DAG levels ran in parallel (~60% of tables), cutting estimated migration from 3 days to 18 hours. Ephemeral DBs for tests; ~90% coverage."
+                    "Cut Elasticsearch-to-PostgreSQL migration 75% (3 days to 18 hours) by running a parallel Java DAG (JGraphT) over 1.39 million records, with ~60% of tables concurrent.",
+                    "Kept migration integrity with DFS/SCC cycle handling, nested arrays to junction tables, checksums, and rollback on failure."
             ));
-            case "credit-saison" -> withBullets(role, List.of(
-                    "Backend on Saison Omni, Credit Saison's co-lending platform: banks and NBFCs from origination through loan management.",
-                    "Partner-facing APIs and LMS sync through go-lives in a regulated NBFC environment."
+            case "credit-saison" -> withBullets(role, "Java, Spring Boot, REST APIs, PostgreSQL", List.of(
+                    "Engineered Saison Omni co-lending backend services so banks and NBFCs could run origination through LMS sync in a regulated NBFC environment."
             ));
             case "trippe" -> withBullets(role, "Software Developer", "Java, Spring Boot, SQL, React, AWS", List.of(
-                    "From scratch: a travel itinerary planner using a Bloom filter."
+                    "Architected a travel itinerary planner from scratch, using a Bloom filter in Java/Spring Boot to keep membership checks cheap."
             ));
             default -> role;
         };
@@ -143,19 +141,29 @@ public class PortfolioCatalog {
     }
 
     private static Project forResume(Project project) {
-        if (!"notebook".equals(project.id())) {
-            return project;
-        }
-        return new Project(
-                project.id(),
-                project.name(),
-                project.period(),
-                project.role(),
-                project.href(),
-                project.github(),
-                "Civic livability ledger for Bengaluru: ward scores, neighbour reports, Next.js/TypeScript.",
-                List.of()
-        );
+        return switch (project.id()) {
+            case "notebook" -> new Project(
+                    project.id(),
+                    project.name(),
+                    project.period(),
+                    project.role(),
+                    project.href(),
+                    project.github(),
+                    "Built a civic livability ledger in Next.js, TypeScript, and SQL so residents can track ward scores and neighbour reports for urban transparency in Bengaluru.",
+                    List.of()
+            );
+            case "claudegravity" -> new Project(
+                    project.id(),
+                    "AI Agent Workflow Framework",
+                    project.period(),
+                    "Author",
+                    "https://medium.com/@anrgbndhu/we-had-20-ai-agents-and-no-way-to-know-if-they-were-any-good-so-i-built-one-8f522ce07a37",
+                    project.github(),
+                    "Designed an open-source CLI workflow-agent blueprint that grades codebase context (100/100), published on Medium and as the sole India submission in Netsmart's AI skills repo.",
+                    List.of()
+            );
+            default -> project;
+        };
     }
 
     private static SiteModel build() {

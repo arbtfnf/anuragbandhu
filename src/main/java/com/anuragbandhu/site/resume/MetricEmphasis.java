@@ -15,13 +15,17 @@ public class MetricEmphasis {
 
     private static final Pattern METRIC = Pattern.compile(
             "~?\\d+(?:\\.\\d+)?\\s*billion"
+                    + "|~?\\d+(?:\\.\\d+)?\\s*million"
                     + "|~?\\d{1,3}(?:,\\d{3})+/sec"
                     + "|\\d{1,3}(?:,\\d{3})*ms"
                     + "|~?\\d+(?:\\.\\d+)?-\\d+(?:\\.\\d+)?%"
                     + "|~?\\d+(?:\\.\\d+)?%"
                     + "|24/7"
                     + "|\\d+-repository"
-                    + "|~?\\d+\\s+(?:unassigned|rotations|production|FHIR|junior)"
+                    + "|\\d+\\s+repositor(?:y|ies)"
+                    + "|~?\\d+-service"
+                    + "|\\d+\\s+pull"
+                    + "|~?\\d+\\s+(?:unassigned|rotations|production|FHIR|junior|design)"
                     + "|\\d+\\s+(?:days?|hours?|months?|weeks?)"
     );
 

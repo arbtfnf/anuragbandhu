@@ -59,8 +59,12 @@
     <section>
       <h2>Skills</h2>
       <p><strong>Languages:</strong> <span th:text="${resume.skills().languagesLine()}"></span></p>
+      <th:block th:if="${resume.skills().hasArchitecture()}">
+        <p><strong>Backend &amp; Architecture:</strong> <span th:text="${resume.skills().architectureLine()}"></span></p>
+        <p><strong>Data &amp; Search:</strong> <span th:text="${resume.skills().toolsLine()}"></span></p>
+      </th:block>
+      <p th:unless="${resume.skills().hasArchitecture()}"><strong>Tools &amp; Frameworks:</strong> <span th:text="${resume.skills().toolsLine()}"></span></p>
       <p><strong>Cloud &amp; Infrastructure:</strong> <span th:text="${resume.skills().cloudLine()}"></span></p>
-      <p><strong>Tools &amp; Frameworks:</strong> <span th:text="${resume.skills().toolsLine()}"></span></p>
     </section>
 
     <section>
@@ -91,7 +95,7 @@
     </section>
 
     <section>
-      <h2>Projects</h2>
+      <h2>Projects &amp; Technical Publications</h2>
       <div class="paper-job" th:each="project : ${resume.projects()}">
         <p class="paper-role">
           <strong>
